@@ -1,33 +1,35 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View , Button} from 'react-native';
-import { db } from './FirebaseConfig';
-import { collection, getDoc, doc, getDocs } from "firebase/firestore";
-import { useState } from 'react';
+import 'react-native-gesture-handler';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import LoginScreen from './Screens/LoginScreen';
+import RegisterScreen from './Screens/RegisterScreen';
+import HomeScreen from './Screens/HomeScreen';
+
+const Stack = createStackNavigator();
 
 export default function App() {
-    const [tab, setTab] = useState([])
-    async function readData(){
-        const querySnapshot = await getDocs(collection(db, "/Wiedza/pisownia ou/Zadania/"));
-            querySnapshot.forEach((doc) => {
-            //console.log(doc.data());
-            //setTab(doc.data());
-            console.log(tab);
-            console.log("-----------------------");
-        });
-    } 
     return (
-        <View style={styles.container}>
-            <Button title="kliknij" onPress={readData}></Button>
-            <StatusBar style="auto" />
-        </View>
+        <NavigationContainer>
+            <Stack.Navigator initialRouteName="Login">
+
+                <Stack.Screen
+                    name="Login"
+                    component={LoginScreen}
+                    options={{headerShown:false}}
+                />
+
+                <Stack.Screen
+                    name="Register"
+                    component={RegisterScreen}
+                />
+
+                <Stack.Screen
+                    name="Home"
+                    component={HomeScreen}
+                    options={{headerShown:false}}
+                />
+            </Stack.Navigator>
+        </NavigationContainer> 
     );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  
