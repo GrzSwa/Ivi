@@ -8,11 +8,11 @@ import LoginScreen from './Screens/LoginScreen';
 import RegisterScreen from './Screens/RegisterScreen';
 import SelectionTopicScreen from './Screens/SelectionTopicScreen';
 import ResetPasswordScreen from './Screens/ResetPasswordScreen';
-import ExamScreen from './Screens/ExamScreen';
 import SelectionExamScreen from './Screens/SelectionExamScreen';
+import ExamScreen from './Screens/ExamScreen'; //Jakieś problemy z tym
 import StatScreen from './Screens/StatScreen';
 import Account from './components/Account';
-import { Platform } from 'react-native';
+import TopBar from './components/TopBar';
 
 
 const Stack = createStackNavigator();
@@ -22,18 +22,18 @@ const Tab = createMaterialTopTabNavigator();
 function Draw(){
     return(
         <Drawer.Navigator screenOptions={{headerShown:false, drawerPosition:'right'}} drawerContent={props => <Account {...props}/>}>
-            <Drawer.Screen name="Home" component={TabNav} />
+            <Drawer.Screen name="Drawer" component={TabNav} />
         </Drawer.Navigator>
     )
 }
 
 function TabNav() {
     return (
-      <Tab.Navigator screenOptions={{tabBarStyle: { backgroundColor: 'powderblue', paddingTop: Platform.OS === 'android' ? 30 : 0, }}}>
-        <Tab.Screen name="Tematy" component={SelectionTopicScreen} />
-        <Tab.Screen name="Testy" component={SelectionExamScreen} />
-        <Tab.Screen name="Statystyki" component={StatScreen} />
-      </Tab.Navigator>
+        <Tab.Navigator tabBar={props => <TopBar {...props}/>}>
+            <Tab.Screen name="Tematy" component={SelectionTopicScreen} />
+            <Tab.Screen name="Testy" component={SelectionExamScreen} />
+            <Tab.Screen name="Statystyki" component={StatScreen} />
+        </Tab.Navigator>
     );
   }
 
@@ -64,6 +64,7 @@ export default function App() {
                     name="Reset"
                     component={ResetPasswordScreen}
                 />
+
 
             </Stack.Navigator>
         </NavigationContainer> 
