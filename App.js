@@ -1,23 +1,41 @@
 import 'react-native-gesture-handler';
+import './FirebaseConfig';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import LoginScreen from './Screens/LoginScreen';
 import RegisterScreen from './Screens/RegisterScreen';
-import HomeScreen from './Screens/HomeScreen';
+import SelectionTopicScreen from './Screens/SelectionTopicScreen';
 import ResetPasswordScreen from './Screens/ResetPasswordScreen';
+import ExamScreen from './Screens/ExamScreen';
+import SelectionExamScreen from './Screens/SelectionExamScreen';
+import StatScreen from './Screens/StatScreen';
 import Account from './components/Account';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { Platform } from 'react-native';
+
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
+const Tab = createMaterialTopTabNavigator();
 
 function Draw(){
     return(
-        <Drawer.Navigator screenOptions={props => <Account {...props}/>}>
-            <Drawer.Screen name="Home" component={HomeScreen} />
+        <Drawer.Navigator screenOptions={{headerShown:false, drawerPosition:'right'}} drawerContent={props => <Account {...props}/>}>
+            <Drawer.Screen name="Home" component={TabNav} />
         </Drawer.Navigator>
     )
 }
+
+function TabNav() {
+    return (
+      <Tab.Navigator screenOptions={{tabBarStyle: { backgroundColor: 'powderblue', paddingTop: Platform.OS === 'android' ? 30 : 0, }}}>
+        <Tab.Screen name="Tematy" component={SelectionTopicScreen} />
+        <Tab.Screen name="Testy" component={SelectionExamScreen} />
+        <Tab.Screen name="Statystyki" component={StatScreen} />
+      </Tab.Navigator>
+    );
+  }
 
 export default function App() {
     return (
