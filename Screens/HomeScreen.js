@@ -1,29 +1,20 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, SafeAreaView, Button } from 'react-native';
+import { getAuth, signOut} from 'firebase/auth';
 
 export default function HomeScreen({navigation, route}) {
-    const check = () =>{
-        console.log(route.params.user)
-    } 
+    
+    const auth = getAuth();
 
-    if(route.params.user){
         return (
             <SafeAreaView style={styles.container}>
                 <View>
                     <Text>asd</Text>
-                    <Button title="show params" onPress={check}/>
+                    <Button title="show params" onPress={()=>{console.log(auth)}}/>
+                    <Button title="wyloguj" onPress={() => {signOut(auth), navigation.navigate("Login")}}/>
                 </View>
             </SafeAreaView>
         );
-    }else{
-        return (
-            <SafeAreaView style={styles.container}>
-                <View>                        
-                    <Text>UPS x_x</Text>
-                </View>
-            </SafeAreaView>
-        );
-    }
 }
 
 const styles = StyleSheet.create({

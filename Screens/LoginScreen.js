@@ -1,36 +1,37 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View, SafeAreaView, Platform, TextInput, Button, Alert } from 'react-native';
+
+import React, {useEffect, useState} from 'react';
 import { useForm, Controller } from "react-hook-form";
-import { signInWithEmailAndPassword} from 'firebase/auth';
-import { auth } from '../FirebaseConfig';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { StyleSheet, Text, View, SafeAreaView, Platform, TextInput, Button, Alert, TouchableOpacity } from 'react-native';
+import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword} from 'firebase/auth';
 
 export default function LoginScreen({navigation}) {
 
+    const auth = getAuth();
+    const [user, setUser] = useState();
     const { control, handleSubmit} = useForm();
-    const [warning, setWarning] = useState(false);
+
+    useEffect(() => {
+        onAuthStateChanged(auth, (user) => { {user ? setUser(user) : setUser(undefined)} })
+    },[])
 
     const onSubmit = (data) =>{
         console.log(data);
-        if( data.Login < 1 || data.password < 1 || data.Login == undefined || data.password == undefined){
-            {setWarning(!warning)}
-        }else{
-            {setWarning(!warning)}
-            {signInWithEmailAndPassword(auth, data.Login, data.password).then((cred) => {
-                navigation.navigate("Home", {user: cred});
-                console.log(cred.user.email);
-            }).catch((error) => {
-                Alert.alert("Błąd logowania firebase","Niepoprawny login lub hasło",[
-                    {text: "Cancel",},
-                    { text: "OK", }
-                    ]
-                );
-            })}
-        };
-    }
+        {signInWithEmailAndPassword(auth, data.Login, data.password).then((cred) => {
+            navigation.navigate("Home", {user: cred});
+            console.log(cred.user.email);
+        }).catch((error) => {
+            Alert.alert("Błąd logowania firebase","Niepoprawny login lub hasło",[
+                {text: "Cancel",},
+                { text: "OK", }
+                ]
+            );
+        })}
+    };
+    
 
-    return (
-        <SafeAreaView style={styles.container}>      
+    if (!user){
+        return (
+            <SafeAreaView style={styles.container}>      
             <View>
                 <View style={styles.iconBox}>
                     <View style={styles.icon}>
@@ -44,7 +45,7 @@ export default function LoginScreen({navigation}) {
                         rules={{require:true}}
                         render={({field: {value, onChange}, fieldState:{error}}) => 
                             <TextInput 
-                                style={[styles.input, {borderColor: warning ? "red" : "black",}]}
+                                style={styles.input}
                                 placeholder='Login'
                                 value={value}
                                 onChangeText={onChange}
@@ -58,7 +59,7 @@ export default function LoginScreen({navigation}) {
                         rules={{require:true}}
                         render={({field: {value, onChange}}) => 
                             <TextInput 
-                                style={[styles.input, {borderColor: warning ? "red" : "black",}]}
+                                style={styles.input}
                                 placeholder='Hasło'
                                 value={value}
                                 onChangeText={onChange}
@@ -77,44 +78,52 @@ export default function LoginScreen({navigation}) {
                 </View>
             </View>
         </SafeAreaView>
-    );
+        );
+    }else{
+        return(
+            <View>
+                {navigation.navigate("Home")}
+            </View>
+        )
+    }
 }
 
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'red',
-    paddingTop: Platform.OS === 'android' ? 30 : 0,
-  },
-  iconBox: {
-    backgroundColor: 'yellow',
-    height:'45%',
-    justifyContent:'center',
-    alignItems:'center',
-  },
-
-  icon: {
-    backgroundColor: 'gold',
-    width:'50%',
-    height:'50%',
-    justifyContent:'center',
-    alignItems:'center',
-  },
-
-  FormBox: {
-    backgroundColor: 'dodgerblue',
-    height:'50%',
-    justifyContent:'flex-start',
-    alignItems:'center',
-  },
-
-  input: {
-    backgroundColor: 'white',
-    width: 300,
-    height: 40,
-    padding: 10,
-    borderRadius: 4,
-    borderWidth:2,
-    marginBottom:20,
-  },
-});
+    container: {
+      flex: 1,
+      backgroundColor: 'red',
+      paddingTop: Platform.OS === 'android' ? 30 : 0,
+    },
+    iconBox: {
+      backgroundColor: 'yellow',
+      height:'45%',
+      justifyContent:'center',
+      alignItems:'center',
+    },
+  
+    icon: {
+      backgroundColor: 'gold',
+      width:'50%',
+      height:'50%',
+      justifyContent:'center',
+      alignItems:'center',
+    },
+  
+    FormBox: {
+      backgroundColor: 'dodgerblue',
+      height:'50%',
+      justifyContent:'flex-start',
+      alignItems:'center',
+    },
+  
+    input: {
+      backgroundColor: 'white',
+      width: 300,
+      height: 40,
+      padding: 10,
+      borderRadius: 4,
+      borderWidth:2,
+      marginBottom:20,
+    },
+  });

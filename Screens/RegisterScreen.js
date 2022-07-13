@@ -1,11 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, SafeAreaView, TextInput} from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, TextInput, Button, Alert, ScrollView} from 'react-native';
 import { useForm, Controller } from "react-hook-form";
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../FirebaseConfig';
+import { getAuth,createUserWithEmailAndPassword } from 'firebase/auth';
+
 
 export default function RegisterScreen({navigation}) {
-
+    const auth = getAuth();
     const { control, handleSubmit} = useForm();
     const onSubmit = (data) =>{
         {createUserWithEmailAndPassword(auth,data.email,data.password).then((cred) => {
@@ -14,6 +14,13 @@ export default function RegisterScreen({navigation}) {
                 { text: "OK", }
             ]
             );
+        }).catch((error) => {
+            if(error.code == 'auth/email-already-in-use'){
+                Alert.alert("Błąd","Istnieje już konto o tym adresie email",
+                [
+                    { text: "OK", }
+                ])
+            }
         })}
 
     }
