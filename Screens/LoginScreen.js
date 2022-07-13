@@ -1,28 +1,30 @@
+import React, { useState } from "react";
 import { StyleSheet, Text, View, SafeAreaView, Platform, TextInput, Button, Alert } from 'react-native';
 import { useForm, Controller } from "react-hook-form";
 import { signInWithEmailAndPassword} from 'firebase/auth';
 import { auth } from '../FirebaseConfig';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default function LoginScreen({navigation}) {
 
     const { control, handleSubmit} = useForm();
+    const [warning, setWarning] = useState(false);
 
     const onSubmit = (data) =>{
         console.log(data);
         if( data.Login < 1 || data.password < 1 || data.Login == undefined || data.password == undefined){
-            Alert.alert("Błąd logowania","Niepoprawny login lub hasło",[
-                {
-                    text: "Cancel",
-                    onPress: () => console.log("Cancel Pressed"),
-                },
-                { text: "OK", onPress: () => console.log("OK Pressed") }
-                ]
-            );
+            {setWarning(!warning)}
         }else{
+            {setWarning(!warning)}
             {signInWithEmailAndPassword(auth, data.Login, data.password).then((cred) => {
-                
                 navigation.navigate("Home", {user: cred});
                 console.log(cred.user.email);
+            }).catch((error) => {
+                Alert.alert("Błąd logowania firebase","Niepoprawny login lub hasło",[
+                    {text: "Cancel",},
+                    { text: "OK", }
+                    ]
+                );
             })}
         };
     }
@@ -42,7 +44,7 @@ export default function LoginScreen({navigation}) {
                         rules={{require:true}}
                         render={({field: {value, onChange}, fieldState:{error}}) => 
                             <TextInput 
-                                style={styles.input}
+                                style={[styles.input, {borderColor: warning ? "red" : "black",}]}
                                 placeholder='Login'
                                 value={value}
                                 onChangeText={onChange}
@@ -56,13 +58,21 @@ export default function LoginScreen({navigation}) {
                         rules={{require:true}}
                         render={({field: {value, onChange}}) => 
                             <TextInput 
-                                style={styles.input}
+                                style={[styles.input, {borderColor: warning ? "red" : "black",}]}
                                 placeholder='Hasło'
                                 value={value}
                                 onChangeText={onChange}
                             />
                         }
                     />
+                    <TouchableOpacity onPress={() => {navigation.navigate("Reset",{auth: auth})}}>
+                        <Text>Zapomniałem/am hasła</Text>
+                    </TouchableOpacity>
+                    
+                    <TouchableOpacity onPress={() => {navigation.navigate("Register")}}>
+                        <Text>Stwórz konto</Text>
+                    </TouchableOpacity>
+
                     <Button title="Zaloguj" onPress={handleSubmit(onSubmit)}/>
                 </View>
             </View>
@@ -105,7 +115,6 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 4,
     borderWidth:2,
-    borderColor:"black",
     marginBottom:20,
   },
 });

@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from './Screens/LoginScreen';
 import RegisterScreen from './Screens/RegisterScreen';
 import HomeScreen from './Screens/HomeScreen';
+import ResetPasswordScreen from './Screens/ResetPasswordScreen';
 
 const Stack = createStackNavigator();
 
@@ -28,6 +29,12 @@ export default function App() {
                     component={HomeScreen}
                     options={{headerShown:false}}
                 />
+
+                <Stack.Screen
+                    name="Reset"
+                    component={ResetPasswordScreen}
+                />
+
             </Stack.Navigator>
         </NavigationContainer> 
     );

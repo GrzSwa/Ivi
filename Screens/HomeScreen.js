@@ -10,7 +10,7 @@ export default function HomeScreen({navigation, route}) {
         return (
             <SafeAreaView style={styles.container}>
                 <View>
-                    <Text>Succesfuly</Text>
+                    <Text>asd</Text>
                     <Button title="show params" onPress={check}/>
                 </View>
             </SafeAreaView>
