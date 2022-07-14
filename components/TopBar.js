@@ -1,17 +1,16 @@
-import { View,Text, Button, TouchableOpacity,Animated, Platform } from 'react-native';
+import { View,Text, TouchableOpacity, Platform, StyleSheet } from 'react-native';
 
-export default function TopBar({ state, descriptors, navigation, position }){
+export default function TopBar({ state, descriptors, navigation }){
     return (
-        <View style={{ flexDirection: 'row', paddingTop: Platform.OS === 'android' ? 30 : 0}}>
+        <View style={styles.container}>
+            <View style={styles.firstRow}>
+                <Text>Napis</Text>
+                <Text>Logo</Text>
+            </View>
+            <View style={styles.btnBackground}>
             {state.routes.map((route, index) => {
                 const { options } = descriptors[route.key];
-                const label =
-                    options.tabBarLabel !== undefined
-                    ? options.tabBarLabel
-                    : options.title !== undefined
-                    ? options.title
-                    : route.name;
-        
+                const label =  options.title !== undefined ? options.title : route.name;
                 const isFocused = state.index === index;
         
                 const onPress = () => {
@@ -22,7 +21,6 @@ export default function TopBar({ state, descriptors, navigation, position }){
                   });
         
                   if (!isFocused && !event.defaultPrevented) {
-                    // The `merge: true` option makes sure that the params inside the tab screen are preserved
                     navigation.navigate({ name: route.name, merge: true });
                   }
                 };
@@ -34,24 +32,48 @@ export default function TopBar({ state, descriptors, navigation, position }){
                   });
                 };
         
-
-        
                 return (
                   <TouchableOpacity
+                    key={route.name}
                     accessibilityRole="button"
                     accessibilityState={isFocused ? { selected: true } : {}}
                     accessibilityLabel={options.tabBarAccessibilityLabel}
                     testID={options.tabBarTestID}
                     onPress={onPress}
                     onLongPress={onLongPress}
-                    style={{ flex: 1 }}
                   >
-                    <Animated.Text>
+                    <Text style={[styles.btn, {textDecorationLine: isFocused ? 'underline' : 'none'}]}>
                       {label}
-                    </Animated.Text>
+                    </Text>
                   </TouchableOpacity>
                 );
             })}
         </View>
+    </View>
     );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor:'lime',
+    paddingTop: Platform.OS == 'android' ? 30 : 0,
+    height:'17%',
+    justifyContent:'flex-end',
+  },
+  firstRow: {
+    backgroundColor:'red',
+    padding:20,
+    flexDirection:'row',
+    justifyContent:'space-between',
+  },
+  btnBackground: {
+    flexDirection:'row',
+    backgroundColor:'white',
+    alignItems:'center',
+    justifyContent:'space-evenly',
+  },
+  btn: {
+    backgroundColor:'gold',
+    padding:10,
+  },
+});
