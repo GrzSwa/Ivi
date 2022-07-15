@@ -5,7 +5,9 @@ export default function TopBar({ state, descriptors, navigation }){
         <View style={styles.container}>
             <View style={styles.firstRow}>
                 <Text>Napis</Text>
-                <Text>Logo</Text>
+                <TouchableOpacity onPress={()=>{navigation.openDrawer()}}>
+                    <Text>Logo</Text>
+                </TouchableOpacity>
             </View>
             <View style={styles.btnBackground}>
             {state.routes.map((route, index) => {
