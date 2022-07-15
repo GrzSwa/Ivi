@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, FlatList, TouchableOpacity, ScrollView} from 'react-native';
-import { ProgressBar } from 'react-native-paper';
-import { getAuth} from 'firebase/auth';
+import { Button, ProgressBar } from 'react-native-paper';
+import { getAuth } from 'firebase/auth';
+import { db } from '../FirebaseConfig';
+import { ref, onValue } from "firebase/database";
+
 
 const DATA = [
 	{
@@ -19,6 +22,23 @@ const DATA = [
   ];
 
 
+function readData(){	
+	const read = ref(db, '/');
+	onValue(read, (snapshot) => {
+		const data = snapshot.val();
+		var result = data.map((item)=>{
+			return{
+				key: item.Pisownia,
+				opis: item.OpisTematu,
+				zasady: item.Zasady
+			};
+		})
+		//return (result)
+		console.log(result[0].key);
+	});
+}
+
+
 const Item = ({ item, onPress }) => (
 	<TouchableOpacity onPress={onPress} >
 		<View style={styles.listStyleContainer}>
@@ -27,7 +47,7 @@ const Item = ({ item, onPress }) => (
 			</View>
 			<View style={styles.rightContent}>
 				<View style={styles.title}>
-					<Text>{item.title}</Text>
+					<Text>{item.opis.Tytul}</Text>
 				</View>
 				<View style={styles.descriptions}>
 					<Text>descriptions</Text>
@@ -42,13 +62,13 @@ const Item = ({ item, onPress }) => (
 
 export default function HomeScreen({navigation, route}) {
 	
-	const auth = getAuth();
 	const [selectedId, setSelectedId] = useState(null);
+
 	const renderItem = ({ item }) => {
 		return (
 		  <Item
 			item={item}
-			onPress={() => setSelectedId(item.id)}
+			onPress={() => setSelectedId(item.key)}
 		  />
 		);
 	};
@@ -57,11 +77,12 @@ export default function HomeScreen({navigation, route}) {
 				<View style={styles.listSpace}>
 					<FlatList
 						style={{width:'100%'}}
-						data={DATA}
+						data={readData}
 						renderItem={renderItem}
-						keyExtractor={(item) => item.id}
+						keyExtractor={(item) => item[0].key} // Zrobić statycznie taki plik json zamiast tablicy DATA u góry i sprawdzić
 						extraData={selectedId}
 					/>
+					<Button onPress={readData}>show DB</Button>
 				</View>
 			</SafeAreaView>
 		);

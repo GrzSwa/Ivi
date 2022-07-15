@@ -1,20 +1,19 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { getDatabase } from "firebase/database";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBEA7QJ8bDloodMTSZOm4cqYjQjWchr3fI",
-  authDomain: "ivi-database.firebaseapp.com",
-  projectId: "ivi-database",
-  storageBucket: "ivi-database.appspot.com",
-  messagingSenderId: "455426591381",
-  appId: "1:455426591381:web:af9d18e5a4dbe60bec699c"
+  apiKey: "AIzaSyDc2OYBH89Mo8aqEagDs8CsT7V9MhzQX6c",
+  authDomain: "ortografiadb.firebaseapp.com",
+  projectId: "ortografiadb",
+  storageBucket: "ortografiadb.appspot.com",
+  messagingSenderId: "617087916984",
+  appId: "1:617087916984:web:594b4e8f7465e41fdc0d4d"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
+export const db = getDatabase(app);
