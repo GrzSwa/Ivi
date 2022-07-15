@@ -4,12 +4,11 @@ import { useForm, Controller } from "react-hook-form";
 import { StyleSheet, Text, View, SafeAreaView, Platform, TextInput, Button, Alert, TouchableOpacity } from 'react-native';
 import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword} from 'firebase/auth';
 
-export default function LoginScreen({navigation}) {
+export default function LoginScreen({navigation, route}) {
 
     const auth = getAuth();
-    const [user, setUser] = useState();
-    const { control, handleSubmit} = useForm();
-
+    const [ user, setUser ] = useState();
+    const { control, handleSubmit } = useForm();
     useEffect(() => {
         onAuthStateChanged(auth, (user) => { {user ? setUser(user) : setUser(undefined)} })
     },[])
@@ -45,6 +44,7 @@ export default function LoginScreen({navigation}) {
                         rules={{require:true}}
                         render={({field: {value, onChange}, fieldState:{error}}) => 
                             <TextInput 
+                                defaultValue='G.swajda@gmail.com'
                                 style={styles.input}
                                 placeholder='Login'
                                 value={value}
@@ -59,6 +59,7 @@ export default function LoginScreen({navigation}) {
                         rules={{require:true}}
                         render={({field: {value, onChange}}) => 
                             <TextInput 
+                                defaultValue='qwerty'
                                 style={styles.input}
                                 placeholder='Hasło'
                                 value={value}
@@ -75,6 +76,7 @@ export default function LoginScreen({navigation}) {
                     </TouchableOpacity>
 
                     <Button title="Zaloguj" onPress={handleSubmit(onSubmit)}/>
+                    <Button title="Show Params" onPress={()=>{console.log(route.params); console.log(auth.currentUser)}}/>
                 </View>
             </View>
         </SafeAreaView>

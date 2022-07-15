@@ -7,8 +7,9 @@ const Account = props => {
     return (
         <View style={{flex: 1}} >
             <DrawerContentScrollView>
-                    <Text>Dziala</Text>
+                    <Text>{auth.currentUser.email} </Text>
                     <Button title="wyloguj" onPress={() => {signOut(auth), props.navigation.navigate("Login")}}/>
+                    <Button title="Show User" onPress={() => {console.log(auth.currentUser)}}/>
             </DrawerContentScrollView>		
         </View>
     );
