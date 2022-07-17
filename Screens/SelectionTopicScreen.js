@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { ProgressBar } from 'react-native-paper';
+import { Button, ProgressBar } from 'react-native-paper';
 import { getAuth } from 'firebase/auth';
 import { db } from '../FirebaseConfig';
 import { ref, onValue } from "firebase/database";
@@ -12,36 +12,45 @@ export default function HomeScreen({navigation, route}) {
 	const [selectedId, setSelectedId] = useState(null);
 
 	function readData(){
-		const read = ref(db,'/');
+		const read = ref(db,'/Tematy');
 		onValue(read, (snapshot) => {
 			var arr = [];
 			snapshot.forEach((res)=>{
 				arr.push({
 					key:res.val().Pisownia,
-					data: res.val()
+					desc: res.val().OpisTematu,
+					example:res.val().Przyklady
 				})
+				console.log(res.val().Przyklady);
 			})
 			setData(arr);
 			setLoading(false);
 		});
 	}
 
+	async function checkSelectedTopic(id){
+		if(selectedId != null){setSelectedId(null)}
+		setSelectedId(id)
+	}
+
 	useEffect(()=>{
 		readData();
 	},[]);
 
+	
+
 	const renderItem = ({ item }) =>(
-		<TouchableOpacity onPress={()=>{setSelectedId(item.key); console.log(selectedId)}}>
+		<TouchableOpacity onPress={()=>{checkSelectedTopic(item.key)}}>
 			<View style={styles.listStyleContainer}>
-				<View style={styles.picture}>
+				<View style={[styles.picture, {backgroundColor: selectedId === item.key ? 'blue' : 'pink'}]}>
 					<Text>IMG</Text>
 				</View>
 				<View style={styles.rightContent}>
 					<View style={styles.title}>
-						<Text>{item.data.OpisTematu.Tytul}</Text>
+						<Text>{item.desc.Tytul}</Text>
 					</View>
 					<View style={styles.descriptions}>
-						<Text>{item.data.OpisTematu.Opis}</Text>
+						<Text>{item.desc.Opis}</Text>
 					</View>
 					<View style={styles.progress}>
 						<ProgressBar progress={0.5} color={'lime'}/>
@@ -61,6 +70,7 @@ if(!loading){
 					keyExtractor={(item) => {item.key}}
 					extraData={selectedId}
 				/>
+			<Button onPress={readData}>Show DB</Button>
 			</View>
 		</SafeAreaView>
 	);
