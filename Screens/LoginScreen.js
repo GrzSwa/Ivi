@@ -1,11 +1,12 @@
 
 import React, {useEffect, useState} from 'react';
 import { useForm, Controller } from "react-hook-form";
-import { StyleSheet, Text, View, SafeAreaView, Platform, TextInput, Button, Alert, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, Platform, TextInput, Button, Alert, TouchableOpacity, StatusBar} from 'react-native';
 import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword} from 'firebase/auth';
 
-export default function LoginScreen({navigation, route}) {
+const SB_HEIGHT = StatusBar.currentHeight;
 
+export default function LoginScreen({navigation, route}) {
     const auth = getAuth();
     const [ user, setUser ] = useState();
     const { control, handleSubmit } = useForm();
@@ -30,7 +31,7 @@ export default function LoginScreen({navigation, route}) {
 
     if (!user){
         return (
-            <SafeAreaView style={styles.container}>      
+            <SafeAreaView style={styles.container}>   
             <View>
                 <View style={styles.iconBox}>
                     <View style={styles.icon}>
@@ -95,7 +96,7 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: 'red',
-      paddingTop: Platform.OS === 'android' ? 30 : 0,
+      paddingTop: Platform.OS === 'android' ? SB_HEIGHT : 0,
     },
     iconBox: {
       backgroundColor: 'yellow',

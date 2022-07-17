@@ -1,78 +1,15 @@
-{
-    "Tematy":
-    [
-        {
-            "Pisownia":"PisowniaOU",
-            "OpisTematu":
-                {
-                    "Oznaczenie":"Óu",
-                    "Tytul":"Nauka pisowni U otwarte oraz Ó z kreską",
-                    "Opis":"/Przelewać z pustego w próżne/, czyli nie jeden sposób przedstawienia zapisu tych dwóch jakże ważnych liter w języku polskim. Ten temat wyjaśni zasady, jakie stosuje się przy zapisie tych liter abyś mógł bez problemowo rozróżniać jakie /u/ pasuje do jakiego słowa."
-                },
-            "Zasady":
-                [
-                    {
-                        "0":"Ó z kreską piszemy zawsze, gdy w słowie ta litera wymienia się na A lub E lub O w innych formach wyrazu, bądź w wyrazach pokrewnych np. pióro bo pierze, wzór bo wzory, powrót bo wracać."
-                    },
+[
+    {
+        "Oznaczenie":"ÓU",
+        "Tytul":"Nauka pisowni U otwarte oraz Ó z kreską",
+        "Opis":"/Przelewać z pustego w próżne/, czyli nie jeden sposób przedstawienia zapisu tych dwóch jakże ważnych liter w języku polskim. Ten temat wyjaśni zasady, jakie stosuje się przy zapisie tych liter abyś mógł bez problemowo rozróżniać jakie /u/ pasuje do jakiego słowa."
+    
+    },
 
-                    {
-                        "1":"Ó z kreską zawsze stoi w wyrazach, które konczą się na -ów, -ówka, -ówna. Od każdej reguły są wyjątki. W tym przypadku są takie słowa jak: skuwka, zasuwka, wsuwka, gdzie zamiast ó z kreską, piszemy u otwarte."
-                    },
-
-                    {
-                        "2":"Litera Ó z kreską nigdy nie występuje na koncu wyrazu. Za to jest pare wyrazów, które się zaczynają na tą literę np. słowa z rodziny liczby 8 (Ósmy, Ósemka) oraz wyrazy zaczynające się na ów-. "
-                    },
-
-                    {
-                        "3":"U otwarte lub możemy też powiedzieć u zwykłe to litera, która zawsze stoi na końcu danego wyraz(u). "
-                    },
-                    
-                    {
-                        "Przyklady":[
-                            ["stół","trójka","skrót","mówić"],
-                            ["kotów","pocztówka","Optaów","Nowakówna","złotówka","skuwka", "zasuwka", "wsuwka"],
-                            ["ósmoklasita", "ówdzie", "ówczesny", "ówcześnie","ósemkowy" ]
-                        ]
-                    }
-                ]
-                    
-        },
-
-        {
-            "Pisownia":"PisowniaRż",
-            "OpisTematu":
-                {
-                    "Oznaczenie":"Óu",
-                    "Tytul":"Nauka pisowni U otwarte oraz Ó z kreską",
-                    "Opis":"/Przelewać z pustego w próżne/, czyli nie jeden sposób przedstawienia zapisu tych dwóch jakże ważnych liter w języku polskim. Ten temat wyjaśni zasady, jakie stosuje się przy zapisie tych liter abyś mógł bez problemowo rozróżniać jakie /u/ pasuje do jakiego słowa."
-                },
-            "Zasady":
-                [
-                    {
-                        "0":"Ó z kreską piszemy zawsze, gdy w słowie ta litera wymienia się na A lub E lub O w innych formach wyrazu, bądź w wyrazach pokrewnych np. pióro bo pierze, wzór bo wzory, powrót bo wracać."
-                    },
-
-                    {
-                        "1":"Ó z kreską zawsze stoi w wyrazach, które konczą się na -ów, -ówka, -ówna. Od każdej reguły są wyjątki. W tym przypadku są takie słowa jak: skuwka, zasuwka, wsuwka, gdzie zamiast ó z kreską, piszemy u otwarte."
-                    },
-
-                    {
-                        "2":"Litera Ó z kreską nigdy nie występuje na koncu wyrazu. Za to jest pare wyrazów, które się zaczynają na tą literę np. słowa z rodziny liczby 8 (Ósmy, Ósemka) oraz wyrazy zaczynające się na ów-. "
-                    },
-
-                    {
-                        "3":"U otwarte lub możemy też powiedzieć u zwykłe to litera, która zawsze stoi na końcu danego wyraz(u). "
-                    },
-                    
-                    {
-                        "Przyklady":[
-                            ["stół","trójka","skrót","mówić"],
-                            ["kotów","pocztówka","Optaów","Nowakówna","złotówka","skuwka", "zasuwka", "wsuwka"],
-                            ["ósmoklasita", "ówdzie", "ówczesny", "ówcześnie","ósemkowy" ]
-                        ]
-                    }
-                ]
-                    
-        }
-    ]
-}
+    {
+        "Oznaczenie":"Rż",
+        "Tytul":"Nauka pisowni U otwarte oraz Ó z kreską",
+        "Opis":"/Przelewać z pustego w próżne/, czyli nie jeden sposób przedstawienia zapisu tych dwóch jakże ważnych liter w języku polskim. Ten temat wyjaśni zasady, jakie stosuje się przy zapisie tych liter abyś mógł bez problemowo rozróżniać jakie /u/ pasuje do jakiego słowa."
+    
+    }
+]

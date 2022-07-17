@@ -1,5 +1,5 @@
-import { View,Text, TouchableOpacity, Platform, StyleSheet } from 'react-native';
-
+import { View,Text, TouchableOpacity, Platform, StyleSheet, StatusBar } from 'react-native';
+const SB_HEIGHT = StatusBar.currentHeight;
 export default function TopBar({ state, descriptors, navigation }){
     return (
         <View style={styles.container}>
@@ -58,7 +58,7 @@ export default function TopBar({ state, descriptors, navigation }){
 const styles = StyleSheet.create({
   container: {
     backgroundColor:'lime',
-    paddingTop: Platform.OS == 'android' ? 30 : 0,
+    paddingTop: Platform.OS == 'android' ? SB_HEIGHT : 0,
     height:'17%',
     justifyContent:'flex-end',
   },
