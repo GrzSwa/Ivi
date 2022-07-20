@@ -1,48 +1,26 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Button, ProgressBar } from 'react-native-paper';
-import { getAuth } from 'firebase/auth';
-import { db } from '../FirebaseConfig';
-import { ref, onValue } from "firebase/database";
-
+//import { db } from '../FirebaseConfig';
+// import { ref, onValue } from "firebase/database";
+import { getTopic, getAllInfoOfTopic } from '../MyModule/Database';
 
 export default function HomeScreen({navigation, route}) {
 	const [data, setData] = useState([]);
 	const [loading, setLoading] = useState(true)
 	const [selectedId, setSelectedId] = useState(null);
 
-	function readData(){
-		const read = ref(db,'/Tematy');
-		onValue(read, (snapshot) => {
-			var arr = [];
-			snapshot.forEach((res)=>{
-				arr.push({
-					key:res.val().Pisownia,
-					desc: res.val().OpisTematu,
-					example:res.val().Przyklady
-				})
-				console.log(res.val().Przyklady);
-			})
-			setData(arr);
-			setLoading(false);
-		});
-	}
-
-	async function checkSelectedTopic(id){
-		if(selectedId != null){setSelectedId(null)}
-		setSelectedId(id)
-	}
-
 	useEffect(()=>{
-		readData();
+		setData(getTopic());
+		setLoading(false);
 	},[]);
 
 	
 
 	const renderItem = ({ item }) =>(
-		<TouchableOpacity onPress={()=>{checkSelectedTopic(item.key)}}>
+		<TouchableOpacity onPress={()=>{navigation.navigate("Topic",{id:item.key})}}>
 			<View style={styles.listStyleContainer}>
-				<View style={[styles.picture, {backgroundColor: selectedId === item.key ? 'blue' : 'pink'}]}>
+				<View style={styles.picture}>
 					<Text>IMG</Text>
 				</View>
 				<View style={styles.rightContent}>
@@ -70,7 +48,7 @@ if(!loading){
 					keyExtractor={(item) => {item.key}}
 					extraData={selectedId}
 				/>
-			<Button onPress={readData}>Show DB</Button>
+			<Button onPress={()=>{getAllInfoOfTopic("g.swajda@gmail.com")}}>Show DB</Button>
 			</View>
 		</SafeAreaView>
 	);

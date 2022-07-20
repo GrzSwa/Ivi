@@ -13,7 +13,7 @@ import ExamScreen from './Screens/ExamScreen'; //Jakieś problemy z tym
 import StatScreen from './Screens/StatScreen';
 import Account from './components/Account';
 import TopBar from './components/TopBar';
-
+import TopicScreen from './Screens/TopicScreen';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -57,6 +57,12 @@ export default function App() {
                 <Stack.Screen
                     name="Home"
                     component={Draw}
+                    options={{headerShown:false}}
+                />
+
+                <Stack.Screen
+                    name="Topic"
+                    component={TopicScreen}
                     options={{headerShown:false}}
                 />
 
