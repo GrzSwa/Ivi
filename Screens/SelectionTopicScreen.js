@@ -3,7 +3,8 @@ import { StyleSheet, Text, View, SafeAreaView, FlatList, TouchableOpacity, Activ
 import { Button, ProgressBar } from 'react-native-paper';
 //import { db } from '../FirebaseConfig';
 // import { ref, onValue } from "firebase/database";
-import { getTopic, getAllInfoOfTopic } from '../MyModule/Database';
+import { getTopic } from '../MyModule/Database';
+import { getAuth } from 'firebase/auth';
 
 export default function HomeScreen({navigation, route}) {
 	const [data, setData] = useState([]);
@@ -11,7 +12,7 @@ export default function HomeScreen({navigation, route}) {
 	const [selectedId, setSelectedId] = useState(null);
 
 	useEffect(()=>{
-		setData(getTopic());
+		setData(getTopic(getAuth().currentUser.email));
 		setLoading(false);
 	},[]);
 
@@ -31,7 +32,7 @@ export default function HomeScreen({navigation, route}) {
 						<Text>{item.desc.Opis}</Text>
 					</View>
 					<View style={styles.progress}>
-						<ProgressBar progress={0.5} color={'lime'}/>
+						<ProgressBar progress={item.progress/100} color={'lime'}/>
 					</View>
 				</View>
 			</View>
@@ -48,7 +49,7 @@ if(!loading){
 					keyExtractor={(item) => {item.key}}
 					extraData={selectedId}
 				/>
-			<Button onPress={()=>{getAllInfoOfTopic("g.swajda@gmail.com")}}>Show DB</Button>
+			<Button onPress={()=>{console.log(data)}}>Show DB</Button>
 			</View>
 		</SafeAreaView>
 	);
