@@ -1,5 +1,8 @@
 import { db } from '../FirebaseConfig';
 import { ref, onValue } from "firebase/database";
+import { getAuth } from 'firebase/auth';
+
+const auth = getAuth();
 
 export function getOnlyTopic(){
     const read = ref(db,'/Tematy');
@@ -39,9 +42,9 @@ export function getOnlyAccount(user){
     return arr
 }
 
-export function getTopic(user){
+export function getTopic(){
     const topic = getOnlyTopic();
-    const account = getOnlyAccount(user);
+    const account = getOnlyAccount(auth.currentUser.email);
     var arr = [];
 
     account.forEach((acc)=>{

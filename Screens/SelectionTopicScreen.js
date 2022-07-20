@@ -1,22 +1,18 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, FlatList, TouchableOpacity } from 'react-native';
 import { Button, ProgressBar } from 'react-native-paper';
-//import { db } from '../FirebaseConfig';
-// import { ref, onValue } from "firebase/database";
 import { getTopic } from '../MyModule/Database';
-import { getAuth } from 'firebase/auth';
+import { Loading } from '../components/Loading';
 
 export default function HomeScreen({navigation, route}) {
 	const [data, setData] = useState([]);
 	const [loading, setLoading] = useState(true)
-	const [selectedId, setSelectedId] = useState(null);
 
 	useEffect(()=>{
-		setData(getTopic(getAuth().currentUser.email));
+		setData(getTopic());
 		setLoading(false);
 	},[]);
 
-	
 
 	const renderItem = ({ item }) =>(
 		<TouchableOpacity onPress={()=>{navigation.navigate("Topic",{id:item.key})}}>
@@ -47,7 +43,6 @@ if(!loading){
 					data={data}
 					renderItem={renderItem}
 					keyExtractor={(item) => {item.key}}
-					extraData={selectedId}
 				/>
 			<Button onPress={()=>{console.log(data)}}>Show DB</Button>
 			</View>
@@ -55,11 +50,7 @@ if(!loading){
 	);
 }else{
 	return(
-		<SafeAreaView style={styles.container}>
-				<View style={styles.listSpace}>
-					<ActivityIndicator size="small" color="#0000ff" />
-				</View>
-		</SafeAreaView>
+		<Loading />
 	)
 }
 }
