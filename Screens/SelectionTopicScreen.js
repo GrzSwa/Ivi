@@ -1,17 +1,30 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, FlatList, TouchableOpacity } from 'react-native';
 import { Button, ProgressBar } from 'react-native-paper';
-import { getTopic } from '../MyModule/Database';
 import { Loading } from '../components/Loading';
+import { db, firebase } from '../FirebaseConfig';
+import { ref, onValue } from "firebase/database";
+import { getAuth } from 'firebase/auth';
 
 export default function HomeScreen({navigation, route}) {
 	const [data, setData] = useState([]);
-	const [loading, setLoading] = useState(true)
+	const [loading, setLoading] = useState(true);
+	const auth = getAuth();
 
+	function read(){
+		const readData = ref(db,'/');
+		var arr = [];
+		onValue(readData, (snapshot)=>{
+			console.log(auth.currentUser);
+		})
+	}
+
+	
 	useEffect(()=>{
-		setData(getTopic());
-		setLoading(false);
-	},[]);
+		read();
+	},[])
+
+
 
 
 	const renderItem = ({ item }) =>(
@@ -22,13 +35,13 @@ export default function HomeScreen({navigation, route}) {
 				</View>
 				<View style={styles.rightContent}>
 					<View style={styles.title}>
-						<Text>{item.desc.Tytul}</Text>
+						<Text>item.desc.Tytul</Text>
 					</View>
 					<View style={styles.descriptions}>
-						<Text>{item.desc.Opis}</Text>
+						<Text>item.desc.Opis</Text>
 					</View>
 					<View style={styles.progress}>
-						<ProgressBar progress={item.progress/100} color={'lime'}/>
+						<ProgressBar progress={1} color={'lime'}/>
 					</View>
 				</View>
 			</View>
