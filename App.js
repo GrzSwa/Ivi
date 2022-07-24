@@ -51,7 +51,7 @@ export default function App() {
                 <Stack.Screen
                     name="Register"
                     component={RegisterScreen}
-                    options={{headerBackTitle:'Cofnij', title: 'Cofnij'}}
+                    options={{headerBackTitle:'Cofnij', title: 'Cofnij', headerStyle:{backgroundColor:'#FEECE9'}}}
                 />
 
                 <Stack.Screen
@@ -69,6 +69,7 @@ export default function App() {
                 <Stack.Screen
                     name="Reset"
                     component={ResetPasswordScreen}
+                    options={{headerBackTitle:'Cofnij', title: 'Cofnij', headerStyle:{backgroundColor:'#FEECE9'}}}
                 />
 
 

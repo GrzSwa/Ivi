@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, Alert, TouchableOpacity } from 'react-native';
 import { useForm, Controller } from "react-hook-form";
 import { sendPasswordResetEmail } from 'firebase/auth';
 
@@ -31,6 +31,7 @@ export default function ResetPasswordScreen({navigation, route}) {
                             placeholder='Adres e-mail'
                             value={value}
                             onChangeText={onChange}
+                            placeholderTextColor='white'
                         />
                     }
                 />
@@ -45,10 +46,13 @@ export default function ResetPasswordScreen({navigation, route}) {
                             placeholder='Potwierdź adres e-mail'
                             value={value}
                             onChangeText={onChange}
+                            placeholderTextColor='white'
                         />
                     }
                 />
-                <Button title="Resetuj Hasło" onPress={handleSubmit(onSubmit)}/>
+                <TouchableOpacity onPress={() => {handleSubmit(onSubmit)}} style={styles.btn}>
+                    <Text>Resetuj Hasło</Text>
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -57,12 +61,11 @@ export default function ResetPasswordScreen({navigation, route}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#feece9',
     alignItems: 'center',
     justifyContent: 'center',
   },
   FormBox: {
-    backgroundColor: 'dodgerblue',
     padding:20,
     width:'100%',
     height:'80%',
@@ -71,13 +74,25 @@ const styles = StyleSheet.create({
   },
 
   input: {
-    backgroundColor: 'white',
+    backgroundColor: '#2F3A8F',
+    color:'#CCD1E4',
     width: 300,
     height: 40,
     padding: 10,
-    borderRadius: 4,
-    borderWidth:2,
-    borderColor:"black",
+    borderRadius: 30,
     marginBottom:20,
-  },
+    
+},
+
+btn:{
+    backgroundColor: '#50FF70',
+    width: 300,
+    height: 40,
+    alignItems:'center',
+    justifyContent:'center',
+    color:'white',
+    padding: 10,
+    borderRadius: 30,
+    marginTop:20
+},
 });

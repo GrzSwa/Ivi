@@ -1,9 +1,8 @@
-
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import { useForm, Controller } from "react-hook-form";
-import { StyleSheet, Text, View, SafeAreaView, Platform, TextInput, Button, Alert, TouchableOpacity, StatusBar} from 'react-native';
-import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword} from 'firebase/auth';
-import { ref, onValue } from "firebase/database";
+import { StyleSheet, Text, View, SafeAreaView, Platform, TextInput, Button, Alert, TouchableOpacity, StatusBar, Image} from 'react-native';
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword} from 'firebase/auth';
+import { getDownloadURL, getStorage, ref } from "firebase/storage";
 
 const SB_HEIGHT = StatusBar.currentHeight;
 
@@ -11,9 +10,18 @@ export default function LoginScreen({navigation, route}) {
     const auth = getAuth();
     const [ user, setUser ] = useState();
     const { control, handleSubmit } = useForm();
-    
+    const [icon, setIcon] = useState(undefined);
+
     useEffect(() => {
         onAuthStateChanged(auth, (user) => { {user ? setUser(user) : setUser(undefined)} })
+        const getImage = async () =>{
+            const storage = getStorage();
+            const pathReference = ref(storage, '/icon.png');
+            await getDownloadURL(pathReference).then((res)=>{
+                setIcon(res);
+            })
+        }
+        getImage()
     },[])
 
     const onSubmit = (data) =>{
@@ -37,7 +45,7 @@ export default function LoginScreen({navigation, route}) {
             <View>
                 <View style={styles.iconBox}>
                     <View style={styles.icon}>
-                        <Text>Logo</Text>
+                        <Image source={{uri:icon}} style={{width:'100%',height:'100%'}}/>
                     </View>
                 </View>
                 <View style={styles.FormBox}>
@@ -47,11 +55,11 @@ export default function LoginScreen({navigation, route}) {
                         rules={{require:true}}
                         render={({field: {value, onChange}, fieldState:{error}}) => 
                             <TextInput 
-                                defaultValue='G.swajda@gmail.com'
                                 style={styles.input}
                                 placeholder='Login'
                                 value={value}
                                 onChangeText={onChange}
+                                placeholderTextColor='white'
                             />
                         }
                     />
@@ -62,24 +70,26 @@ export default function LoginScreen({navigation, route}) {
                         rules={{require:true}}
                         render={({field: {value, onChange}}) => 
                             <TextInput 
-                                defaultValue='qwerty'
                                 style={styles.input}
                                 placeholder='Hasło'
                                 value={value}
                                 onChangeText={onChange}
+                                placeholderTextColor='white'
+                                
                             />
                         }
                     />
                     <TouchableOpacity onPress={() => {navigation.navigate("Reset",{auth: auth})}}>
-                        <Text>Zapomniałem/am hasła</Text>
+                        <Text style={styles.actionBtn}>Zapomniałem/am hasła</Text>
                     </TouchableOpacity>
                     
                     <TouchableOpacity onPress={() => {navigation.navigate("Register")}}>
-                        <Text>Stwórz konto</Text>
+                        <Text style={styles.actionBtn}>Stwórz konto</Text>
                     </TouchableOpacity>
 
-                    <Button title="Zaloguj" onPress={handleSubmit(onSubmit)}/>
-                    <Button title="Show Params" onPress={()=>{console.log(route.params); console.log(auth.currentUser)}}/>
+                    <TouchableOpacity onPress={() => {handleSubmit(onSubmit)}} style={styles.btn}>
+                        <Text>Zaloguj</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         </SafeAreaView>
@@ -96,39 +106,66 @@ export default function LoginScreen({navigation, route}) {
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      backgroundColor: 'red',
-      paddingTop: Platform.OS === 'android' ? SB_HEIGHT : 0,
+        flex: 1,
+        backgroundColor: '#FEECE9',
+        paddingTop: Platform.OS === 'android' ? SB_HEIGHT : 0,
     },
     iconBox: {
-      backgroundColor: 'yellow',
-      height:'45%',
-      justifyContent:'center',
-      alignItems:'center',
+        height:'45%',
+        justifyContent:'center',
+        alignItems:'center',
     },
-  
+   
+
     icon: {
-      backgroundColor: 'gold',
-      width:'50%',
-      height:'50%',
-      justifyContent:'center',
-      alignItems:'center',
+        width:'50%',
+        height:'50%',
+        justifyContent:'center',
+        alignItems:'center',
+        borderRadius:1,
+        shadowColor: "black",
+        shadowOffset: {
+            width: 0,
+            height: 0,
+        },
+        shadowOpacity: 0.9,
+        shadowRadius: 5,
+        elevation: 20,
     },
   
     FormBox: {
-      backgroundColor: 'dodgerblue',
-      height:'50%',
-      justifyContent:'flex-start',
-      alignItems:'center',
+        height:'50%',
+        justifyContent:'flex-start',
+        alignItems:'center',
     },
   
     input: {
-      backgroundColor: 'white',
-      width: 300,
-      height: 40,
-      padding: 10,
-      borderRadius: 4,
-      borderWidth:2,
-      marginBottom:20,
+        backgroundColor: '#2F3A8F',
+        color:'#CCD1E4',
+        width: 300,
+        height: 40,
+        padding: 10,
+        borderRadius: 30,
+        marginBottom:20,
+        
+    },
+
+    btn:{
+        backgroundColor: '#50FF70',
+        width: 300,
+        height: 40,
+        alignItems:'center',
+        justifyContent:'center',
+        color:'white',
+        padding: 10,
+        borderRadius: 30,
+        marginTop:20
+    },
+
+    actionBtn:{
+        alignItems:'center',
+        justifyContent:'center',
+        color:'#2F3A8F',
+        paddingBottom: 10,
     },
   });
