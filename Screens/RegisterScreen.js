@@ -2,11 +2,26 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, SafeAreaView, TextInput, Button, Alert, ScrollView} from 'react-native';
 import { useForm, Controller } from "react-hook-form";
 import { getAuth,createUserWithEmailAndPassword, updateProfile  } from 'firebase/auth';
-
+import { db } from '../FirebaseConfig';
+import { ref, set, onValue } from "firebase/database";
+import { useEffect, useState } from 'react';
 
 export default function RegisterScreen({navigation}) {
     const auth = getAuth();
+    const [newUserDatabaseSpace, SetNewUserDatabaseSpace] = useState(0);
+    const [topicImprove, setTopicImprove] = useState([]);
     const { control, handleSubmit} = useForm();
+    
+    function writeUserData(userNumber,email) {
+        set(ref(db, '/Konta/' + userNumber), {
+            Email: email,
+            NajlepszyCzas: "00:00:00",
+            NajlepszyTemat : "",
+            Strike: 0,
+            PostepTematow: topicImprove
+        });
+    }
+
     const onSubmit = (data) =>{
         {createUserWithEmailAndPassword(auth,data.email,data.password).then((cred) => {
             updateProfile(auth.currentUser, {displayName:data.userName});
@@ -24,8 +39,34 @@ export default function RegisterScreen({navigation}) {
                 ])
             }
         })}
-
+        writeUserData(newUserDatabaseSpace,data.email)
     }
+    
+    function getAmountUser(){
+        const readData = ref(db,'/')
+        onValue(readData,(snapshot)=>{
+            var amount = snapshot.val()['Konta'].length;;
+            var arr = [];
+            for(let j in snapshot.val()['Tematy']){
+                arr.push({
+                    Pisownia: snapshot.val()['Tematy'][j].Pisownia,
+                    Postep:0,
+                    IloscProb:0,
+                    Bledy:0,
+                    wynik:0,
+                    OstatniaProba:0
+
+                })
+            }
+        setTopicImprove(arr);
+        SetNewUserDatabaseSpace(amount);
+        })
+    }
+
+    useEffect(()=>{
+        getAmountUser()
+    },[])
+
     return (
         <SafeAreaView style={styles.container}>   
             <View style={styles.FormBox}>

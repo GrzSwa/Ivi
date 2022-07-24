@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import { useForm, Controller } from "react-hook-form";
 import { StyleSheet, Text, View, SafeAreaView, Platform, TextInput, Button, Alert, TouchableOpacity, StatusBar} from 'react-native';
 import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword} from 'firebase/auth';
+import { ref, onValue } from "firebase/database";
 
 const SB_HEIGHT = StatusBar.currentHeight;
 
@@ -10,6 +11,7 @@ export default function LoginScreen({navigation, route}) {
     const auth = getAuth();
     const [ user, setUser ] = useState();
     const { control, handleSubmit } = useForm();
+    
     useEffect(() => {
         onAuthStateChanged(auth, (user) => { {user ? setUser(user) : setUser(undefined)} })
     },[])

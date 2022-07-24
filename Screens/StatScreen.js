@@ -31,6 +31,8 @@ export default function StatScreen() {
             var id = 0;
             var mistake = 0;
             var atempt = 0;
+            var avg = 0;
+            var repetitions = '';
             var arr = [];
             for(let i in data){
                 if(auth.currentUser.email == data[i].Email){
@@ -42,16 +44,20 @@ export default function StatScreen() {
                 atempt =  data[id].PostepTematow[0].IloscProb;
                 if(data[id].PostepTematow[j].Bledy >= mistake)
                     mistake = data[id].PostepTematow[j].Bledy;
-                if(data[id].PostepTematow[j].IloscProb >= atempt)
-                    atempt = data[id].PostepTematow[j].IloscProb
+                if(data[id].PostepTematow[j].IloscProb >= atempt){
+                    atempt = data[id].PostepTematow[j].IloscProb;
+                    repetitions = data[id].PostepTematow[j].Pisownia;
+                }
+                avg += data[id].PostepTematow[j].wynik;
             }
             arr.push({
                 time: data[id].NajlepszyCzas,
                 topic: data[id].NajlepszyTemat,
-                avg: data[id].SredniWynik,
+                avg: avg,
                 strike: data[id].Strike,
                 mistake: mistake,
-                atempt: atempt
+                atempt: atempt,
+                repetitions:repetitions.replace("Pisownia","")
             });
             setStat(arr);
             setLoading(false);
@@ -101,7 +107,7 @@ if(!loading)
             <View style={styles.otherStat}>
                 <View style={styles.otherStatView}>
                     <View style={{backgroundColor:'mediumseagreen', alignItems:'center', width:'15%'}}>
-                        <Text>{stat[0].avg}%</Text>
+                        <Text>{stat[0].avg/amount}%</Text>
                     </View>
 
                     <View style={{backgroundColor:'mediumaquamarine', alignItems:'center', width:'85%'}}>
@@ -115,7 +121,7 @@ if(!loading)
                         </View>
 
                         <View style={{backgroundColor:'mediumaquamarine', alignItems:'center', width:'85%'}}>
-                            <Text>Powtórzonych testów</Text>
+                            <Text>Powtórzonych testów z {stat[0].repetitions}</Text>
                         </View>
                     </View>
 

@@ -1,35 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, FlatList, TouchableOpacity, Button} from 'react-native';
-import { getAuth} from 'firebase/auth';
-
-const DATA = [
-	{
-        id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-        title: 'Test1',
-        status: 0,
-	},
-	{
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-        title: 'Test2',
-        status: 1,
-	},
-	{
-        id: '58694a0f-3da1-471f-bd96-145571e29d72',
-        title: 'Test3',
-        status: 2,
-	},
-    {
-        id: '58694a0f-3da1-471f-3ad53abb28ba-471f',
-        title: 'Test4',
-        status: 2,
-      },
-  ];
+import { db } from '../FirebaseConfig';
+import { ref, onValue } from "firebase/database";
+import { getAuth } from 'firebase/auth';
+import { Loading } from '../components/Loading';
 
 const Beginning = ({ item, onPress }) => (
 	<TouchableOpacity onPress={onPress} >
 		<View style={styles.examListStyleContainer}>
 			<View style={styles.exam}>
-                <Text>{item.title}</Text>
+                <Text>{item.key}</Text>
 			</View>
 
 			<View style={styles.examDescriptions}>
@@ -42,16 +22,16 @@ const Beginning = ({ item, onPress }) => (
 const Tried = ({ item, onPress }) => (
 		<View style={styles.examListStyleContainer}>
 			<View style={styles.exam}>
-                <Text>{item.title}</Text>
+                <Text>{item.key}</Text>
 			</View>
 
             <View style={styles.lastTry}>
-                <Text>75%</Text>
-                <Text>Ostatnia próba - 50%</Text>
+                <Text>{item.result}%</Text>
+                <Text>Ostatnia próba - {item.lastResult}</Text>
 			</View>
 
 			<View style={styles.btn}>
-				<Button title='Rozwiąż jeszcze raz' onPress={onPress}/>
+				<Text>Rozwiąż jeszcze raz</Text>
 			</View>
 		</View>
   ); 
@@ -60,56 +40,87 @@ const Completed = ({ item, onPress }) => (
 	<TouchableOpacity onPress={onPress} >
 		<View style={styles.examListStyleContainer}>
 			<View style={{backgroundColor: 'darksalmon', alignItems:'center', width:'85%'}}>
-                <Text>100%</Text>
+                <Text>{item.result}%</Text>
 			</View>
 			<View style={{backgroundColor: 'bisque',justifyContent:'center',alignItems:'center',width:'15%'}}>
-                <Text>{item.title}</Text>
+                <Text>{item.key}</Text>
 			</View>
 		</View>
 	</TouchableOpacity>
   );
 
-
-
 export default function SelectionExamScreen() {
 	
-	const [selectedId, setSelectedId] = useState(null);
+  function getExam(){
+		const readData = ref(db,'/Konta');
+			onValue(readData, (snapshot)=>{
+				var arr = [];
+				var idU = 0;
+				var exam = snapshot.val();
+				for(let i in exam){
+					if(exam[i].Email == auth.currentUser.email){
+						idU = i;
+						break;
+					}
+				}
+				for(let j in exam[idU].PostepTematow){
+					arr.push({
+						key:exam[idU].PostepTematow[j].Pisownia,
+						result: exam[idU].PostepTematow[j].wynik,
+						lastResult: exam[idU].PostepTematow[j].OstatniaProba,
+						atempt: exam[idU].PostepTematow[j].IloscProb
+					});
+				}
+				setData(arr);
+				setLoading(false)
+			})    
+	}
+
+	useEffect(()=>{
+		getExam();
+	},[])
+
+	const [data, setData] = useState([]);
+	const [loading, setLoading] = useState(true);
+	const auth = getAuth();
+  
 	const renderItem = ({ item }) => {
-        if(item.status == 0){
+        if(item.atempt == 0 ){
             return (
                 <Beginning
                     item={item}
-                    onPress={() => setSelectedId(item.id)}
                 />
             );
-        }else if(item.status == 1){
+        }if(item.atempt > 0 && item.result < 100){
             return (
                 <Tried
                     item={item}
-                    onPress={() => setSelectedId(item.id)}
                 />
             );
-        }else{
+        }if(item.result == 100){
             return (
                 <Completed
                     item={item}
-                    onPress={() => setSelectedId(item.id)}
                 />
             ); 
         }
 	};
+	if(!loading)
 		return (
 			<SafeAreaView style={styles.container}>
 				<View style={styles.listSpace}>
-					<FlatList
+					<FlatList 
 						style={{width:'100%'}}
-						data={DATA}
+						data={data}
 						renderItem={renderItem}
-						keyExtractor={(item) => item.id}
-						extraData={selectedId}
+						keyExtractor={(item) => {item.key}}
 					/>
 				</View>
 			</SafeAreaView>
+		);
+	else
+		return(
+			<Loading />
 		);
 }
 

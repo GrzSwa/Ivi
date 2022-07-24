@@ -8,7 +8,7 @@ import { getAuth } from 'firebase/auth';
 
 export default function HomeScreen({navigation, route}) {
 	const [data, setData] = useState([]);
-	const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = useState(true)
 	const auth = getAuth();
 
 	function getTopic(){
