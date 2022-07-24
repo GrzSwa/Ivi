@@ -3,9 +3,8 @@ import { StyleSheet, Text, View, SafeAreaView, FlatList, TouchableOpacity } from
 import { Button, ProgressBar } from 'react-native-paper';
 import { Loading } from '../components/Loading';
 import { db } from '../FirebaseConfig';
-import { ref, onValue, set } from "firebase/database";
+import { ref, onValue } from "firebase/database";
 import { getAuth } from 'firebase/auth';
-import { getTopic } from '../MyModule/Database';
 
 export default function HomeScreen({navigation, route}) {
 	const [data, setData] = useState([]);
@@ -74,7 +73,7 @@ if(!loading){
 					renderItem={renderItem}
 					keyExtractor={(item) => {item.key}}
 				/>
-			<Button onPress={()=>{console.log(getTopic())}}>Show DB</Button>
+			<Button onPress={()=>{console.log(data)}}>Show DB</Button>
 			</View>
 		</SafeAreaView>
 	);
