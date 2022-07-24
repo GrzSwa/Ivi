@@ -72,14 +72,26 @@
     [
         {
             "Email":"g.swajda@gmail.com",
+            "NajlepszyCzas":"00:09:36",
+            "NajlepszyTemat":"Rż",
+            "Strike":10,
+            "SredniWynik":95,
             "PostepTematow":[
                 {
                     "Pisownia":"PisowniaÓU",
-                    "Postep":90
+                    "Postep":90,
+                    "IloscProb":2,
+                    "Bledy":6,
+                    "wynik":75,
+                    "OstatniaProba":30
                 },
                 {
                     "Pisownia":"PisowniaRż",
-                    "Postep":30
+                    "Postep":30,
+                    "IloscProb":1,
+                    "Bledy":6,
+                    "wynik":40,
+                    "OstatniaProba":0
                 }
             ]
         }

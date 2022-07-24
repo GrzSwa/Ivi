@@ -1,23 +1,30 @@
-import { useState } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, Button, Platform } from 'react-native';
+import { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, SafeAreaView, Button } from 'react-native';
 import CircularProgress from 'react-native-circular-progress-indicator';
-
+import { getAmountExam } from '../MyModule/Database';
 export default function StatScreen() {
-    const [progress, setProgress] = useState(13)
+    const [progress, setProgress] = useState(1);
+    const [amount, setAmount] = useState(0);
+
+    useEffect(()=>{
+        setAmount(getAmountExam());
+    },[])
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.progress}>
                 <CircularProgress //https://www.npmjs.com/package/react-native-circular-progress-indicator
                     radius={100}
                     value={progress}
-                    maxValue={15}
+                    maxValue={amount}
                     fontSize={20}
-                    valueSuffix={'/15'}
-                    activeStrokeColor={'white'}
-                    inActiveStrokeColor={'red'}
+                    valueSuffix={'/'+amount}
+                    activeStrokeColor={'gold'}
+                    inActiveStrokeColor={'black'}
                     inActiveStrokeOpacity={1}
                     progressValueColor={'blue'}
                 />
+                <Text>Rozwiązane testy</Text>
             </View>
 
             <View style={styles.bestStat}>
@@ -68,6 +75,7 @@ export default function StatScreen() {
                         </View>
                     </View>
             </View>
+            <Button title="ilosc" onPress={()=>{console.log(amount)}}/>
         </SafeAreaView>
     );
 }

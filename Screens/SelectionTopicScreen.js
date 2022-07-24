@@ -2,29 +2,46 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, FlatList, TouchableOpacity } from 'react-native';
 import { Button, ProgressBar } from 'react-native-paper';
 import { Loading } from '../components/Loading';
-import { db, firebase } from '../FirebaseConfig';
-import { ref, onValue } from "firebase/database";
+import { db } from '../FirebaseConfig';
+import { ref, onValue, set } from "firebase/database";
 import { getAuth } from 'firebase/auth';
+import { getTopic } from '../MyModule/Database';
 
 export default function HomeScreen({navigation, route}) {
 	const [data, setData] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const auth = getAuth();
 
-	function read(){
+	function getTopic(){
 		const readData = ref(db,'/');
-		var arr = [];
-		onValue(readData, (snapshot)=>{
-			console.log(auth.currentUser);
-		})
+			onValue(readData, (snapshot)=>{
+				var arr = [];
+				var topic = snapshot.val()["Tematy"];
+				var account = snapshot.val()["Konta"];
+				for(let i in account){
+					if(auth.currentUser.email == account[i].Email){
+						for(let j in topic){
+							if(account[i].PostepTematow[j].Pisownia == topic[j].Pisownia){
+								arr.push({
+									key: topic[j].Pisownia,
+									progress: account[i].PostepTematow[j].Postep,
+									desc: topic[j].OpisTematu,
+									example: topic[j].Przyklady,
+									rules: topic[j].Zasady
+								})
+							}
+						}
+					}else
+						console.log("Warning");
+				}
+				setData(arr);
+				setLoading(false);
+			})    
 	}
 
-	
 	useEffect(()=>{
-		read();
+		getTopic();
 	},[])
-
-
 
 
 	const renderItem = ({ item }) =>(
@@ -35,13 +52,13 @@ export default function HomeScreen({navigation, route}) {
 				</View>
 				<View style={styles.rightContent}>
 					<View style={styles.title}>
-						<Text>item.desc.Tytul</Text>
+						<Text>{item.desc.Tytul}</Text>
 					</View>
 					<View style={styles.descriptions}>
-						<Text>item.desc.Opis</Text>
+						<Text>{item.desc.Opis}</Text>
 					</View>
 					<View style={styles.progress}>
-						<ProgressBar progress={1} color={'lime'}/>
+						<ProgressBar progress={item.progress/100} color={'lime'}/>
 					</View>
 				</View>
 			</View>
@@ -57,7 +74,7 @@ if(!loading){
 					renderItem={renderItem}
 					keyExtractor={(item) => {item.key}}
 				/>
-			<Button onPress={()=>{console.log(data)}}>Show DB</Button>
+			<Button onPress={()=>{console.log(getTopic())}}>Show DB</Button>
 			</View>
 		</SafeAreaView>
 	);
