@@ -87,9 +87,10 @@ export default function LoginScreen({navigation, route}) {
                         <Text style={styles.actionBtn}>Stwórz konto</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => {handleSubmit(onSubmit)}} style={styles.btn}>
+                    <TouchableOpacity onPress={handleSubmit(onSubmit)} style={styles.btn}>
                         <Text>Zaloguj</Text>
                     </TouchableOpacity>
+                    
                 </View>
             </View>
         </SafeAreaView>

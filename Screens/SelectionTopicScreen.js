@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, FlatList, TouchableOpacity } from 'react-native';
-import { Button, ProgressBar } from 'react-native-paper';
 import { Loading } from '../components/Loading';
 import { db } from '../FirebaseConfig';
 import { ref, onValue } from "firebase/database";
 import { getAuth } from 'firebase/auth';
+import { ProgressBar } from '../components/ProgressBar';
 
 export default function HomeScreen({navigation, route}) {
 	const [data, setData] = useState([]);
@@ -18,6 +18,7 @@ export default function HomeScreen({navigation, route}) {
 				var topic = snapshot.val()["Tematy"];
 				var account = snapshot.val()["Konta"];
 				for(let i in account){
+					
 					if(auth.currentUser.email == account[i].Email){
 						for(let j in topic){
 							if(account[i].PostepTematow[j].Pisownia == topic[j].Pisownia){
@@ -32,7 +33,8 @@ export default function HomeScreen({navigation, route}) {
 						}
 					}else
 						console.log("Warning");
-				}
+						
+				break;}
 				setData(arr);
 				setLoading(false);
 			})    
@@ -51,13 +53,19 @@ export default function HomeScreen({navigation, route}) {
 				</View>
 				<View style={styles.rightContent}>
 					<View style={styles.title}>
-						<Text>{item.desc.Tytul}</Text>
+						<Text style={{fontWeight: 'bold', fontSize:14}}>{item.desc.Tytul}</Text>
 					</View>
-					<View style={styles.descriptions}>
-						<Text>{item.desc.Opis}</Text>
+					<View style={styles.descriptions}>  
+						<Text style={{fontSize:12}}>{item.desc.Opis}</Text>
 					</View>
 					<View style={styles.progress}>
-						<ProgressBar progress={item.progress/100} color={'lime'}/>
+						<ProgressBar 
+							width={120}
+							height={10}
+							firstColor={'#FE7E6D'}
+							secondColor={'#2F3A8F'}
+							progress={item.progress}
+						/>
 					</View>
 				</View>
 			</View>
@@ -73,7 +81,6 @@ if(!loading){
 					renderItem={renderItem}
 					keyExtractor={(item) => {item.key}}
 				/>
-			<Button onPress={()=>{console.log(data)}}>Show DB</Button>
 			</View>
 		</SafeAreaView>
 	);
@@ -89,44 +96,52 @@ const styles = StyleSheet.create({
 	flex: 1,
 	alignItems: 'center',
 	justifyContent: 'flex-start',
-	backgroundColor:'dodgerblue',
+	backgroundColor:'#FEECE9',
 	paddingTop:30,
   },
 
   listSpace: {
-	backgroundColor: '#fff',
-	alignItems: 'center',
-	width:'80%',
+	width:'90%',
   },
 
   listStyleContainer: {
-	backgroundColor: 'lightgray',
+	backgroundColor:'#CCD1E4',
 	marginVertical: 8,
 	width:'100%',
-	flexDirection:'row'
+	height:120,
+	flexDirection:'row',
+	padding:20,
+	borderRadius:25,
   },
   picture: {
-	backgroundColor: 'pink',
+	backgroundColor:'#2F3A8F',
+	padding:10,
+	marginTop:10,
+	marginLeft:-5,
+	marginRight:5,
+	height:'80%',
+	borderRadius:20,
+	justifyContent:'center'
   },
   
   rightContent: {
-	backgroundColor: 'aquamarine',
 	width:'100%',
+	paddingLeft:5
   },
 
   title: {
-	backgroundColor: 'bisque',
 	width:'100%',
   },
 
   descriptions: {
-	backgroundColor: 'darksalmon',
-	width:'100%',
+	width:'90%',
   },
 
   progress: {
-	backgroundColor: 'indianred',
-	width:'100%',
-	height:20, //wersja robocza, zmienić!
+	flexDirection:'row',
+	//width:'50%',
+	height:20,
+	paddingTop:5,
+	alignItems:'center'
   },
 });

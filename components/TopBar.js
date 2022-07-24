@@ -4,7 +4,7 @@ export default function TopBar({ state, descriptors, navigation }){
     return (
         <View style={styles.container}>
             <View style={styles.firstRow}>
-                <Text>Napis</Text>
+                <Text>Zażółć gęślą jaźń</Text>
                 <TouchableOpacity onPress={()=>{navigation.openDrawer()}}>
                     <Text>Logo</Text>
                 </TouchableOpacity>
@@ -57,25 +57,26 @@ export default function TopBar({ state, descriptors, navigation }){
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor:'lime',
+    backgroundColor:'#FE7E6D',
     paddingTop: Platform.OS == 'android' ? SB_HEIGHT : 0,
-    height:'17%',
+    height:'20%',
     justifyContent:'flex-end',
+    borderBottomLeftRadius:20,
+    borderBottomRightRadius:20,
+    marginBottom:-15,
+    zIndex:1000,
   },
   firstRow: {
-    backgroundColor:'red',
-    padding:20,
+    padding:25,
     flexDirection:'row',
     justifyContent:'space-between',
   },
   btnBackground: {
     flexDirection:'row',
-    backgroundColor:'white',
     alignItems:'center',
     justifyContent:'space-evenly',
   },
   btn: {
-    backgroundColor:'gold',
     padding:10,
   },
 });
