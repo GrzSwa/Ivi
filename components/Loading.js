@@ -3,9 +3,9 @@ import { StyleSheet, View, SafeAreaView, ActivityIndicator } from 'react-native'
 export const Loading = (props) => {
     return(
 		<SafeAreaView style={styles.container}>
-				<View style={styles.listSpace}>
-					<ActivityIndicator size="large" color="white" />
-				</View>
+			<View style={styles.listSpace}>
+				<ActivityIndicator size="large" color="white" />
+			</View>
 		</SafeAreaView>
 	)
 }
@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor:'dodgerblue',
+        backgroundColor:'#FEECE9',
         paddingTop:30,
     },
     listSpace: {

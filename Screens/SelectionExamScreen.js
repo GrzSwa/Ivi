@@ -1,55 +1,12 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, FlatList, TouchableOpacity, Button} from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, FlatList} from 'react-native';
 import { db } from '../FirebaseConfig';
 import { ref, onValue } from "firebase/database";
 import { getAuth } from 'firebase/auth';
 import { Loading } from '../components/Loading';
+import { Beginning, Tried, Completed } from '../components/ExamStatus';
 
-const Beginning = ({ item, onPress }) => (
-	<TouchableOpacity onPress={onPress} >
-		<View style={styles.examListStyleContainer}>
-			<View style={styles.exam}>
-                <Text>{item.key}</Text>
-			</View>
-
-			<View style={styles.examDescriptions}>
-				<Text>Kliknij aby rozpocząć test</Text>
-			</View>
-		</View>
-	</TouchableOpacity>
-  );
-
-const Tried = ({ item, onPress }) => (
-		<View style={styles.examListStyleContainer}>
-			<View style={styles.exam}>
-                <Text>{item.key}</Text>
-			</View>
-
-            <View style={styles.lastTry}>
-                <Text>{item.result}%</Text>
-                <Text>Ostatnia próba - {item.lastResult}</Text>
-			</View>
-
-			<View style={styles.btn}>
-				<Text>Rozwiąż jeszcze raz</Text>
-			</View>
-		</View>
-  ); 
-
-const Completed = ({ item, onPress }) => (
-	<TouchableOpacity onPress={onPress} >
-		<View style={styles.examListStyleContainer}>
-			<View style={{backgroundColor: 'darksalmon', alignItems:'center', width:'85%'}}>
-                <Text>{item.result}%</Text>
-			</View>
-			<View style={{backgroundColor: 'bisque',justifyContent:'center',alignItems:'center',width:'15%'}}>
-                <Text>{item.key}</Text>
-			</View>
-		</View>
-	</TouchableOpacity>
-  );
-
-export default function SelectionExamScreen() {
+export default function SelectionExamScreen({navigation}) {
 	
   function getExam(){
 		const readData = ref(db,'/Konta');
@@ -65,7 +22,7 @@ export default function SelectionExamScreen() {
 				}
 				for(let j in exam[idU].PostepTematow){
 					arr.push({
-						key:exam[idU].PostepTematow[j].Pisownia,
+						key:exam[idU].PostepTematow[j].Pisownia.replace("Pisownia",""),
 						result: exam[idU].PostepTematow[j].wynik,
 						lastResult: exam[idU].PostepTematow[j].OstatniaProba,
 						atempt: exam[idU].PostepTematow[j].IloscProb
@@ -89,18 +46,24 @@ export default function SelectionExamScreen() {
             return (
                 <Beginning
                     item={item}
+                    style={styles.examListStyleContainer}
+                    onPress={()=>{navigation.navigate("Exam",{id:item.key})}}
                 />
             );
         }if(item.atempt > 0 && item.result < 100){
             return (
                 <Tried
                     item={item}
+                    style={styles.examListStyleContainer}
+                    onPress={()=>{navigation.navigate("Exam",{id:item.key})}}
                 />
             );
         }if(item.result == 100){
             return (
                 <Completed
                     item={item}
+                    style={styles.examListStyleContainer}
+                    onPress={()=>{console.log("Jeszcze raz?")}}
                 />
             ); 
         }
@@ -129,61 +92,22 @@ const styles = StyleSheet.create({
       flex: 1,
       alignItems: 'center',
       justifyContent: 'flex-start',
-      backgroundColor:'dodgerblue',
+      backgroundColor:'#FEECE9',
       paddingTop:30,
+    },
+
+    examListStyleContainer: {
+        backgroundColor: '#CCD1E4',
+        marginVertical: 8,
+        width:'100%',
+        flexDirection:'row',
+        height:120,
+        borderRadius:25,
+        alignItems:'center',
     },
   
     listSpace: {
-      backgroundColor: '#fff',
       alignItems: 'center',
-      width:'80%',
+      width:'90%',
     },
-  
-    listStyleContainer: {
-      backgroundColor: 'lightgray',
-      marginVertical: 8,
-      width:'100%',
-      flexDirection:'row'
-    },
-    examListStyleContainer: {
-        backgroundColor: 'lightgray',
-        marginVertical: 8,
-        width:'100%',
-        flexDirection:'row'
-    },
-    
-    rightContent: {
-      backgroundColor: 'aquamarine',
-      width:'100%',
-    },
-
-    lastTry: {
-        backgroundColor: 'aquamarine',
-        alignItems:'center',
-    },
-  
-    title: {
-      backgroundColor: 'bisque',
-      width:'100%',
-    },
-
-    exam: {
-        backgroundColor: 'bisque',
-        justifyContent:'center',
-        alignItems:'center',
-    },
-
-    btn: {
-        backgroundColor: 'darksalmon',
-    },
-    descriptions: {
-      backgroundColor: 'darksalmon',
-      width:'100%',
-    },
-
-    examDescriptions: {
-        backgroundColor: 'darksalmon',
-        alignItems:'center',
-        width:'100%',
-    },
-  });
+});

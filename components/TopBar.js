@@ -1,12 +1,15 @@
 import { View,Text, TouchableOpacity, Platform, StyleSheet, StatusBar } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+
 const SB_HEIGHT = StatusBar.currentHeight;
+
 export default function TopBar({ state, descriptors, navigation }){
     return (
         <View style={styles.container}>
             <View style={styles.firstRow}>
                 <Text>Zażółć gęślą jaźń</Text>
                 <TouchableOpacity onPress={()=>{navigation.openDrawer()}}>
-                    <Text>Logo</Text>
+					<Ionicons name='menu' size={30} color={"#000"}/>
                 </TouchableOpacity>
             </View>
             <View style={styles.btnBackground}>
@@ -65,11 +68,20 @@ const styles = StyleSheet.create({
     borderBottomRightRadius:20,
     marginBottom:-15,
     zIndex:1000,
+    shadowColor: "#000",
+    shadowOffset:{
+    width: 0,
+    height: 10,
+    },
+    shadowOpacity: 0.51,
+    shadowRadius: 13.16,
+    elevation: 20,
   },
   firstRow: {
     padding:25,
     flexDirection:'row',
     justifyContent:'space-between',
+	alignItems:'center',
   },
   btnBackground: {
     flexDirection:'row',

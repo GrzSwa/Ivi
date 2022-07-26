@@ -9,7 +9,7 @@ import RegisterScreen from './Screens/RegisterScreen';
 import SelectionTopicScreen from './Screens/SelectionTopicScreen';
 import ResetPasswordScreen from './Screens/ResetPasswordScreen';
 import SelectionExamScreen from './Screens/SelectionExamScreen';
-import ExamScreen from './Screens/ExamScreen'; //Jakieś problemy z tym
+import ExamScreen from './Screens/ExamScreen';
 import StatScreen from './Screens/StatScreen';
 import Account from './components/Account';
 import TopBar from './components/TopBar';
@@ -72,6 +72,10 @@ export default function App() {
                     options={{headerBackTitle:'Cofnij', title: 'Cofnij', headerStyle:{backgroundColor:'#FEECE9'}}}
                 />
 
+                <Stack.Screen 
+                    name="Exam"
+                    component={ExamScreen}
+                />
 
             </Stack.Navigator>
         </NavigationContainer> 

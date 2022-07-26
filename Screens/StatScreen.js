@@ -5,6 +5,7 @@ import CircularProgress from 'react-native-circular-progress-indicator';
 import { db } from '../FirebaseConfig';
 import { ref, onValue } from "firebase/database";
 import { getAuth } from 'firebase/auth';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function StatScreen() {
     const [progress, setProgress] = useState(1);
@@ -71,72 +72,75 @@ export default function StatScreen() {
 
 if(!loading)
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.progress}>
-                <CircularProgress //https://www.npmjs.com/package/react-native-circular-progress-indicator
-                    radius={100}
-                    value={progress}
-                    maxValue={amount}
-                    fontSize={20}
-                    valueSuffix={'/'+amount}
-                    activeStrokeColor={'gold'}
-                    inActiveStrokeColor={'black'}
-                    inActiveStrokeOpacity={1}
-                    progressValueColor={'blue'}
-                />
-                <Text>Rozwiązane testy</Text>
-            </View>
-
-            <View style={styles.bestStat}>
-                <View style={styles.bestStatView}>
-                    <Text>{stat[0].strike}</Text>
-                    <Text>1 statystyka</Text>
+        <ScrollView>
+            <SafeAreaView style={styles.container}>    
+                <View style={styles.progress}>
+                    <CircularProgress //https://www.npmjs.com/package/react-native-circular-progress-indicator
+                        radius={100}
+                        value={progress}
+                        maxValue={amount}
+                        fontSize={20}
+                        valueSuffix={'/'+amount}
+                        activeStrokeColor={'#FE7E6D'}
+                        inActiveStrokeColor={'#2F3A8F'}
+                        inActiveStrokeOpacity={1}
+                        progressValueColor={'#2F3A8F'}
+                        inActiveStrokeWidth={40}
+                        activeStrokeWidth={45}
+                    />
+                    <Text style={{marginTop:10, color:'#2F3A8F', fontWeight:'bold', fontSize:14}}>Rozwiązane testy</Text>
                 </View>
 
-                <View style={styles.bestStatView}>
-                    <Text>{stat[0].time}</Text>
-                    <Text>2 statystyka</Text>
-                </View>
-
-                <View style={styles.bestStatView}>
-                    <Text>{stat[0].topic}</Text>
-                    <Text>3 statystyka</Text>
-                </View>
-            </View>
-
-            <View style={styles.otherStat}>
-                <View style={styles.otherStatView}>
-                    <View style={{backgroundColor:'mediumseagreen', alignItems:'center', width:'15%'}}>
-                        <Text>{stat[0].avg/amount}%</Text>
+                <View style={styles.bestStat}>
+                    <View style={styles.bestStatView}>
+                        <Text style={[styles.txt,{fontSize:35}]}>{stat[0].strike}</Text>
+                        <Text style={[styles.txt,{fontSize:12}]} >Rozwiązanych zadań z rzędu</Text>
                     </View>
 
-                    <View style={{backgroundColor:'mediumaquamarine', alignItems:'center', width:'85%'}}>
-                        <Text>Średni wynik</Text>
+                    <View style={styles.bestStatView}>
+                        <Text style={[styles.txt,{fontSize:15, marginTop:15, marginBottom:10}]}>{stat[0].time}</Text>
+                        <Text style={[styles.txt,{fontSize:12}]} >Najszybciej rozwiązany test</Text>
+                    </View>
+
+                    <View style={styles.bestStatView}>
+                        <Text style={[styles.txt,{fontSize:35}]}>{stat[0].topic}</Text>
+                        <Text style={[styles.txt,{fontSize:12}]}>Najlepszy twój test</Text>
                     </View>
                 </View>
 
-                <View style={styles.otherStatView}>
-                    <View style={{backgroundColor:'mediumseagreen', alignItems:'center', width:'15%'}}>
-                            <Text>{stat[0].atempt}</Text>
+                <View style={styles.otherStat}>
+                    <View style={styles.otherStatView}>
+                        <View style={styles.otherStatViewLeft}>
+                            <Text style={[styles.txt,{fontSize:18}]} >{stat[0].avg/amount}%</Text>
                         </View>
 
-                        <View style={{backgroundColor:'mediumaquamarine', alignItems:'center', width:'85%'}}>
-                            <Text>Powtórzonych testów z {stat[0].repetitions}</Text>
+                        <View style={styles.otherStatViewRight}>
+                            <Text style={[styles.txt,{fontSize:14, color:'#000'}]}>Twój średni wynik</Text>
                         </View>
                     </View>
 
-                <View style={styles.otherStatView}>
-                    <View style={{backgroundColor:'mediumseagreen', alignItems:'center', width:'15%'}}>
-                            <Text>{stat[0].mistake}</Text>
+                    <View style={styles.otherStatView}>
+                            <View style={styles.otherStatViewLeft}>
+                                <Text style={styles.txt} >{stat[0].atempt}</Text>
+                            </View>
+
+                            <View style={styles.otherStatViewRight}>
+                                <Text style={[styles.txt,{fontSize:14, color:'#000'}]} >Najwięcej powtórzonych testów z: "{stat[0].repetitions}"</Text>
+                            </View>
                         </View>
 
-                        <View style={{backgroundColor:'mediumaquamarine', alignItems:'center', width:'85%'}}>
-                            <Text>Najwięcej błędów</Text>
+                    <View style={styles.otherStatView}>
+                            <View style={styles.otherStatViewLeft}>
+                                <Text style={styles.txt}  >{stat[0].mistake}</Text>
+                            </View>
+
+                            <View style={styles.otherStatViewRight}>
+                                <Text style={[styles.txt,{fontSize:14, color:'#000'}]} >Najwięcej błędów w jednym teście</Text>
+                            </View>
                         </View>
-                    </View>
-            </View>
-            <Button title="show method"/>
-        </SafeAreaView>
+                </View>
+            </SafeAreaView>
+        </ScrollView>
     );
 else
     return(
@@ -148,40 +152,67 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor:'dodgerblue',   
+        backgroundColor:'#FEECE9',   
         paddingTop:30, 
     },
 
     progress: {
         alignItems: 'center',
-        backgroundColor:'skyblue',
-        width:'80%',   
+        width:'90%',
+        paddingBottom:15,   
     },
 
     bestStat: {
         flexDirection:'row',
         alignItems: 'center',
         justifyContent:'space-between',
-        backgroundColor:'seagreen',
-        width:'80%',   
+        width:'90%',   
         padding:10,
     },
 
     bestStatView: {
         alignItems: 'center',
-        backgroundColor:'palegreen',
+        height:130,
         padding:5,
+        borderRadius:25,
+        width:"30%",
+        backgroundColor:'#FE7E6D',
+        borderRadius:25
     },
 
     otherStat: {
-        justifyContent:'space-between',
-        backgroundColor:'mediumturquoise',
-        width:'80%',   
+        justifyContent:'space-evenly',
+        width:'90%',   
     },
 
     otherStatView: {
+        backgroundColor:'#CCD1E4',
         flexDirection:'row',
-        alignItems: 'center',
-        backgroundColor:'mediumspringgreen',   
+        alignItems: 'center',   
+        marginVertical:10,
+        height:80,
+        borderRadius:25
     },
+
+    otherStatViewLeft: {
+        alignItems: 'center',
+        justifyContent:'center',
+        backgroundColor:'#2F3A8F',
+        height:'100%',
+        flex:1,   
+        borderRadius:25,
+    },
+
+    otherStatViewRight: {
+        alignItems: 'center',
+        flex:5,   
+    },
+
+    txt:{
+        color:'#fff',
+        fontSize:24,
+        textAlign:'center',
+        fontWeight:'bold'
+    }
+
 });
