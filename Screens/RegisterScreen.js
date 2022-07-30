@@ -112,6 +112,8 @@ export default function RegisterScreen({navigation}) {
                             value={value}
                             onChangeText={onChange}
                             placeholderTextColor='white'
+                            secureTextEntry={true}
+                            multiline={false}
                         />
                     }
                 />
@@ -127,10 +129,12 @@ export default function RegisterScreen({navigation}) {
                             value={value}
                             onChangeText={onChange}
                             placeholderTextColor='white'
+                            secureTextEntry={true}
+                            multiline={false}
                         />
                     }
                 />
-                <TouchableOpacity onPress={() => {handleSubmit(onSubmit)}} style={styles.btn}>
+                <TouchableOpacity onPress={handleSubmit(onSubmit)} style={styles.btn}>
                     <Text>Stwórz Konto</Text>
                 </TouchableOpacity>
             </View>

@@ -18,8 +18,7 @@ export default function HomeScreen({navigation, route}) {
 				var topic = snapshot.val()["Tematy"];
 				var account = snapshot.val()["Konta"];
 				for(let i in account){
-					
-					if(auth.currentUser.email == account[i].Email){
+					if(auth.currentUser.email.toLowerCase() == account[i].Email.toLowerCase()){
 						for(let j in topic){
 							if(account[i].PostepTematow[j].Pisownia == topic[j].Pisownia){
 								arr.push({
@@ -31,10 +30,8 @@ export default function HomeScreen({navigation, route}) {
 								})
 							}
 						}
-					}else
-						console.log("Warning");
-						
-				break;}
+					}	
+				}
 				setData(arr);
 				setLoading(false);
 			})    
@@ -46,7 +43,7 @@ export default function HomeScreen({navigation, route}) {
 
 
 	const renderItem = ({ item }) =>(
-		<TouchableOpacity onPress={()=>{navigation.navigate("Topic",{id:item.key})}}>
+		<TouchableOpacity onPress={()=>{navigation.navigate("Topic",{data:item})}}>
 			<View style={styles.listStyleContainer}>
 				<View style={styles.picture}>
 					<Text>IMG</Text>
@@ -65,6 +62,8 @@ export default function HomeScreen({navigation, route}) {
 							firstColor={'#FE7E6D'}
 							secondColor={'#2F3A8F'}
 							progress={item.progress}
+							radius={20}
+							showValue={true}
 						/>
 					</View>
 				</View>

@@ -1,24 +1,36 @@
 import {Text, View} from 'react-native';
 
-export const ProgressBar = ({width, height, firstColor, secondColor, progress})=> (
+function check(show, progress){
+    if(show === true){
+        return(
+            <View>
+                <Text style={{marginTop:-2, marginLeft: 4}}>{progress+'%'}</Text>
+            </View>
+        )
+    }
+}
+
+export const ProgressBar = ({width = 100, height, firstColor, secondColor, progress, radiusBottom, radius, showValue})=> (
 	<View style={{flexDirection:'row',alignItems:'center'}}>
         <View style={{
             width:width,
             height:height,
             backgroundColor:secondColor,
-            borderRadius:20,
+            borderRadius:radius,
+            borderBottomLeftRadius: radiusBottom,
+            borderBottomRightRadius: radiusBottom
         }}>
             <View style={{
-                width: String(progress)+'%',
-                height:10,
+                width: progress !== undefined ? String(progress)+'%' : 100,
+                height:height,
                 backgroundColor:firstColor,
-                borderRadius:20,
+                borderRadius:radius,
+                borderBottomLeftRadius: radiusBottom,
+                borderBottomRightRadius: radiusBottom
             }}>
 
             </View>
         </View>
-        <View>
-            <Text style={{marginTop:-2, marginLeft: 4}}>{progress}%</Text>
-        </View>
+            {check(showValue, progress)}
     </View>
 );

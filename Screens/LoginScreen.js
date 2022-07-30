@@ -75,7 +75,8 @@ export default function LoginScreen({navigation, route}) {
                                 value={value}
                                 onChangeText={onChange}
                                 placeholderTextColor='white'
-                                
+                                secureTextEntry={true}
+                                multiline={false}
                             />
                         }
                     />

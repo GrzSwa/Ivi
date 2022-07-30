@@ -15,7 +15,7 @@ export default function SelectionExamScreen({navigation}) {
 				var idU = 0;
 				var exam = snapshot.val();
 				for(let i in exam){
-					if(exam[i].Email == auth.currentUser.email){
+					if(exam[i].Email.toLowerCase() == auth.currentUser.email.toLowerCase()){
 						idU = i;
 						break;
 					}

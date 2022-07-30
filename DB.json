@@ -5,26 +5,22 @@
             "Pisownia":"PisowniaÓU",
             "OpisTematu":{
                 "Tytul":"Nauka pisowni U otwarte oraz Ó z kreską",
-                "Opis":"\"Przelewać z pustego w próżne\", czyli nie jeden sposób przedstawienia zapisu tych dwóch jakże ważnych liter w języku polskim. Ten temat wyjaśni zasady, jakie stosuje się przy zapisie tych liter abyś mógł bez problemowo rozróżniać jakie \"u\" pasuje do jakiego słowa."
+                "Opis":"Ten temat wyjaśni zasady, jakie stosuje się przy zapisie tych liter abyś mógł bez problemowo rozróżniać jakie \"u\" pasuje do jakiego słowa."
             },
             "Zasady":[
                 {
-                    "id":0,
                     "Opis":"Ó z kreską piszemy zawsze, gdy w słowie ta litera wymienia się na A lub E lub O w innych formach wyrazu, bądź w wyrazach pokrewnych np. pióro bo pierze, wzór bo wzory, powrót bo wracać."
                 },
 
                 {
-                    "id":1,
                     "Opis":"Ó z kreską zawsze stoi w wyrazach, które konczą się na -ów, -ówka, -ówna. Od każdej reguły są wyjątki. W tym przypadku są takie słowa jak: skuwka, zasuwka, wsuwka, gdzie zamiast ó z kreską, piszemy u otwarte."
                 },
     
                 {
-                    "id":2,
                     "Opis":"Litera Ó z kreską nigdy nie występuje na koncu wyrazu. Za to jest pare wyrazów, które się zaczynają na tą literę np. słowa z rodziny liczby 8 (Ósmy, Ósemka) oraz wyrazy zaczynające się na ów-. "
                 },
     
                 {
-                    "id":3,
                     "Opis":"U otwarte lub możemy też powiedzieć u zwykłe to litera, która zawsze stoi na końcu danego wyrazu. "
                 }
             ],
@@ -39,26 +35,22 @@
             "Pisownia":"PisowniaRż",
             "OpisTematu":{
                 "Tytul":"Nauka pisowni Rz oraz Ż z kropką",
-                "Opis":"Brzmią tak samo, więc skąd wiadomo jak poprawnie zapisać usłyszane słowo? W tym temacie pokażemy ci ogólno panujące zasady zapisu wyrazów z tą literą, rozwiążesz parę przykładów i utrwalisz są wiedzę z tego zagadnienia."
+                "Opis":"Brzmią tak samo, więc jak poprawnie zapisać usłyszane słowo? W tym temacie pokażemy ci ogólno panujące zasady zapisu wyrazów z tą literą."
             },
             "Zasady":[
                 {
-                    "id":0,
                     "Opis":"Rz piszemy zawsze, kiedy w wyrazie wymienia się na \"/r\" np. pierze - pióro, drzewo - drewno"
                 },
 
                 {
-                    "id":1,
                     "Opis":"Rz piszemy także po wybranych spółgloskach: b, d, g, ch, j, k, p, t, w\nnp. brzeg, grzyb, chrzan, ujrzeć, zastrzyk. Pewnie po przeczytaniu tej zasady zdałeś sobie sprawę, że \"Zaraz, zaraz przecież po k jest rz a oni napisali także przez ż z kropką\". Nie, to nie jest pomyłka, od każdej zasady jest wyjątek, ale o nich później."
                 },
     
                 {
-                    "id":2,
                     "Opis":"Wszystkie nazwy zawodów, kończą się na Rz :) np. piłkarz, piekarz, zegarmistrz."
                 },
     
                 {
-                    "id":3,
                     "Opis":"Sandomierz, burmistrz, talerz, czyli wszystkie wyrazy kończące się na -erz, -mistrz, -mierz piszemy właśnie Rz."
                 } 
             ],
