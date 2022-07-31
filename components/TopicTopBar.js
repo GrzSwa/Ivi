@@ -1,13 +1,20 @@
 import {Text, View, StatusBar, StyleSheet, Dimensions} from 'react-native';
-import { ProgressBar } from './ProgressBar';
+import { Ionicons } from '@expo/vector-icons';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const SB_HEIGHT = StatusBar.currentHeight;
 
-
-export const TopicTopBar = ({title}) => (
+export const TopicTopBar = ({title, onPress, navigation}) => (
     <View style={styles.container}>
         <View style={styles.firstRow}>
-            <Text>{title}</Text>
+            <View style={{marginLeft:-20}}>
+                <TouchableOpacity onPress={onPress}>
+                    <Ionicons name='arrow-back-circle' size={30} color={"#000"}/>
+                </TouchableOpacity>
+            </View>
+            <View style={{alignItems:'center', flex:1}}>
+                <Text>{title}</Text>
+            </View>
         </View>
     </View>
 );
@@ -26,5 +33,6 @@ const styles = StyleSheet.create({
     firstRow: {
         padding:35,
         alignItems:'center',
+        flexDirection:'row',
     }
 })

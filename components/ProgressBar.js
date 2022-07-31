@@ -1,17 +1,9 @@
 import {Text, View, Animated} from 'react-native';
 import { useRef, useState, useEffect } from 'react';
 
-function check(show, progress){
-    if(show === true){
-        return(
-            <View>
-                <Text style={{marginTop:-2, marginLeft: 4}}>{progress+'%'}</Text>
-            </View>
-        )
-    }
-}
 
-export function ProgressBar({width = 100, height, firstColor, secondColor, progress, radiusBottom, radius, showValue}){
+
+export function ProgressBar({width, height, firstColor, secondColor, progress, radiusBottom, radius, showValue, fontColor, valueInside, text, valueSuffix, fontSize}){
     const [prog, setProg] = useState(0);
 
     useEffect(()=>{
@@ -22,6 +14,29 @@ export function ProgressBar({width = 100, height, firstColor, secondColor, progr
         }
     },[progress])
 
+    function check(){
+        if(showValue && !valueInside){
+            return(
+                <View>
+                    <Text style={{marginTop:-2, marginLeft: 4,}}>{progress+'%'}</Text>
+                </View>
+            )
+        }else{
+            return(
+                <View style={{alignItems:'center', paddingTop:22}}>
+                    <Text style={
+                        { 
+                            marginLeft: -width, 
+                            fontSize:fontSize,
+                            color:fontColor
+                        }
+                    }>
+                        {text}{valueSuffix}
+                    </Text>
+                </View>
+            )
+        }
+    }
     return(
         <View style={{flexDirection:'row',alignItems:'center'}}>
             <View style={{
@@ -30,7 +45,7 @@ export function ProgressBar({width = 100, height, firstColor, secondColor, progr
                 backgroundColor:secondColor,
                 borderRadius:radius,
                 borderBottomLeftRadius: radiusBottom,
-                borderBottomRightRadius: radiusBottom
+                borderBottomRightRadius: radiusBottom,
             }}>
                 <View style={{
                     width: progress !== undefined ? String(prog)+'%' : 100,
@@ -42,6 +57,7 @@ export function ProgressBar({width = 100, height, firstColor, secondColor, progr
                 }}>
                 </View>
             </View>
-                {check(showValue, progress)}
+                {check()}
         </View>
-)};
+)
+};
