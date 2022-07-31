@@ -10,7 +10,7 @@ export function ProgressBar({width, height, firstColor, secondColor, progress, r
         for (let i = prog; i <= progress; i++) {
             setTimeout(() => {
                 setProg(i);
-            }, 5 * i);
+            }, 10* i);
         }
     },[progress])
 

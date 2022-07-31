@@ -1,5 +1,6 @@
 import { View,Text, TouchableOpacity, Platform, StyleSheet, StatusBar } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { CustomText } from './CustomText';
 
 const SB_HEIGHT = StatusBar.currentHeight;
 
@@ -47,9 +48,8 @@ export default function TopBar({ state, descriptors, navigation }){
                     onPress={onPress}
                     onLongPress={onLongPress}
                   >
-                    <Text style={[styles.btn, {textDecorationLine: isFocused ? 'underline' : 'none'}]}>
-                      {label}
-                    </Text>
+                    <CustomText title={label} underlineStyle={[isFocused ? styles.btnUnderline : styles.btn]}/>
+
                   </TouchableOpacity>
                 );
             })}
@@ -87,8 +87,17 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     alignItems:'center',
     justifyContent:'space-evenly',
+	paddingBottom:10
   },
-  btn: {
-    padding:10,
+  btn:{
+	padding:2
   },
+
+  btnUnderline:{
+	width:20,
+	height:3,
+	backgroundColor:'#000',
+	borderRadius:50,
+	marginTop:2
+  }
 });

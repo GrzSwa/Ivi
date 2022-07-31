@@ -4,7 +4,7 @@ export const Loading = (props) => {
     return(
 		<SafeAreaView style={styles.container}>
 			<View style={styles.listSpace}>
-				<ActivityIndicator size="large" color="white" />
+				<ActivityIndicator size="large" color="#2F3A8F" />
 			</View>
 		</SafeAreaView>
 	)
