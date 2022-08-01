@@ -17,14 +17,14 @@ export default function TopicScreen({navigation, route}) {
 	const [txt, setTxt] = useState('');
 	const [showTxt, setShowTxt] = useState(20);
 
-	function redo(){
+	const redo = () => {
 		if(changer == route.params.data.rules.length - 1)
 			{ 
 				//setTxt('Pora na Przykłady');
 				//setShowTxt(50);	 
 			}else {
-				setChanger(changer + 1)
-				setProgress(progress + calc);
+				setChanger(current => current + 1)
+				setProgress(current => current  + calc);
 			}			
 	}
 
@@ -36,6 +36,7 @@ export default function TopicScreen({navigation, route}) {
 			setProgress(progress - calc);
 		}			
 	}
+
 	if(progress != 100)
 		return (
 			<SafeAreaView style={styles.container}>
@@ -60,18 +61,11 @@ export default function TopicScreen({navigation, route}) {
 						rules={route.params.data.rules}
 						example={route.params.data.example}
 						i={changer}
+						callBack={{redo, undo}}
 					/>
 					
 				</View>
-				<View style={styles.actionBtn}>
-					<TouchableOpacity onPress={undo}>
-						<Ionicons name='ios-arrow-undo-circle-sharp' size={60} color={"#2F3A8F"}/>
-					</TouchableOpacity>
-
-					<TouchableOpacity onPress={redo}>
-						<Ionicons name='ios-arrow-redo-circle-sharp' size={60} color={"#2F3A8F"}/>
-					</TouchableOpacity>
-				</View>
+				
 			</SafeAreaView>
 		);
 	else
