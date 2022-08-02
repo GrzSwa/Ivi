@@ -75,6 +75,7 @@ export default function App() {
                 <Stack.Screen 
                     name="Exam"
                     component={ExamScreen}
+                    options={{headerShown:false}}
                 />
 
             </Stack.Navigator>

@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, View, SafeAreaView, Dimensions} from 'react-native';
+import { StyleSheet, View, SafeAreaView, Dimensions, TouchableOpacity} from 'react-native';
 import { LessonBox } from '../components/LessonBox';
 import { TopicTopBar } from '../components/TopicTopBar';
 import { ProgressBar } from '../components/ProgressBar';
 import { Ionicons } from '@expo/vector-icons';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { ExampleBox } from '../components/ExampleBox';
 
 const WIDTH = Dimensions.get("screen").width;
 
@@ -17,27 +15,22 @@ export default function TopicScreen({navigation, route}) {
 	const [txt, setTxt] = useState('');
 	const [showTxt, setShowTxt] = useState(20);
 
-	const redo = () => {
-		if(changer == route.params.data.rules.length - 1)
-			{ 
-				//setTxt('Pora na Przykłady');
-				//setShowTxt(50);	 
-			}else {
-				setChanger(current => current + 1)
-				setProgress(current => current  + calc);
+	async function redo(){
+		if(changer != route.params.data.rules.length - 1){
+				setChanger((current) => current + 1)
+				setProgress((current) => current  + calc);
 			}			
 	}
 
-	function undo(){
+	async function undo(){
 		if(changer == 0){ 
 			setChanger(0); 
 		}else {
-			setChanger(changer - 1);
-			setProgress(progress - calc);
+			setChanger((current) => current - 1);
+			setProgress((current) => current - calc);
 		}			
 	}
 
-	if(progress != 100)
 		return (
 			<SafeAreaView style={styles.container}>
 				<TopicTopBar title={route.params.data.key} onPress={()=>{navigation.goBack()}}/>
@@ -63,33 +56,8 @@ export default function TopicScreen({navigation, route}) {
 						i={changer}
 						callBack={{redo, undo}}
 					/>
-					
 				</View>
-				
-			</SafeAreaView>
-		);
-	else
-		return(
-			<SafeAreaView style={styles.container}>
-				<TopicTopBar title={route.params.data.key} onPress={()=>{navigation.goBack()}}/>
-				<View style={{marginTop:-46}}>
-					<ProgressBar 
-						width={WIDTH}
-						height={showTxt}
-						radiusBottom={20}
-						secondColor={'#FEECE9'}
-						firstColor={'#2F3A8F'}
-						progress={progress}
-						valueInside={true}
-						showValue={true}
-						text={txt}
-						fontColor={'#fff'}
-						fontSize={16}
-					/>
-				</View>
-				<View style={{marginTop:35}}>
-					<ExampleBox />
-				</View>
+
 				<View style={styles.actionBtn}>
 					<TouchableOpacity onPress={undo}>
 						<Ionicons name='ios-arrow-undo-circle-sharp' size={60} color={"#2F3A8F"}/>
@@ -99,6 +67,7 @@ export default function TopicScreen({navigation, route}) {
 						<Ionicons name='ios-arrow-redo-circle-sharp' size={60} color={"#2F3A8F"}/>
 					</TouchableOpacity>
 				</View>
+				
 			</SafeAreaView>
 		);
 }

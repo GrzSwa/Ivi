@@ -1,8 +1,6 @@
 import {Text, View, Animated} from 'react-native';
 import { useRef, useState, useEffect } from 'react';
 
-
-
 export function ProgressBar({width, height, firstColor, secondColor, progress, radiusBottom, radius, showValue, fontColor, valueInside, text, valueSuffix, fontSize}){
     const [prog, setProg] = useState(0);
 
