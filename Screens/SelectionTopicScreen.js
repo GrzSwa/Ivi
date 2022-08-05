@@ -20,7 +20,7 @@ export default function HomeScreen({navigation, route}) {
 				for(let i in account){
 					if(auth.currentUser.email.toLowerCase() == account[i].Email.toLowerCase()){
 						for(let j in topic){
-							if(account[i].PostepTematow[j].Pisownia == topic[j].Pisownia){
+							if(account[i].PostepTematow[j].Pisownia.toLowerCase() == topic[j].Pisownia.toLowerCase()){
 								arr.push({
 									key: topic[j].Pisownia,
 									progress: account[i].PostepTematow[j].Postep,

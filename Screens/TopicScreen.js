@@ -54,7 +54,6 @@ export default function TopicScreen({navigation, route}) {
 						rules={route.params.data.rules}
 						example={route.params.data.example}
 						i={changer}
-						callBack={{redo, undo}}
 					/>
 				</View>
 
