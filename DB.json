@@ -2,7 +2,7 @@
     "Tematy":
     [
         {
-            "Pisownia":"PisowniaÓU",
+            "Pisownia":"PisowniaÓu",
             "OpisTematu":{
                 "Tytul":"Nauka pisowni U otwarte oraz Ó z kreską",
                 "Opis":"Ten temat wyjaśni zasady, jakie stosuje się przy zapisie tych liter abyś mógł bez problemowo rozróżniać jakie \"u\" pasuje do jakiego słowa."
@@ -26,7 +26,7 @@
             ],
             "Przyklady":[
                     ["stół","trójka","skrót","mówić"],
-                    ["kotów","pocztówka","Optaów","Nowakówna","złotówka","skuwka", "zasuwka", "wsuwka"],
+                    ["kotów","pocztówka","Opatów","Nowakówna","złotówka","skuwka", "zasuwka", "wsuwka"],
                     ["ósmoklasita", "ówdzie", "ówczesny", "ówcześnie","ósemkowy" ]
             ]
                 
@@ -64,26 +64,73 @@
     [
         {
             "Email":"g.swajda@gmail.com",
-            "NajlepszyCzas":"00:09:36",
-            "NajlepszyTemat":"Rż",
-            "Strike":10,
-            "SredniWynik":95,
+            "NajlepszyCzas":"-",
+            "NajlepszyTemat":"-",
+            "Strike":0,
             "PostepTematow":[
                 {
-                    "Pisownia":"PisowniaÓU",
-                    "Postep":90,
-                    "IloscProb":2,
-                    "Bledy":6,
-                    "wynik":75,
-                    "OstatniaProba":30
+                    "Pisownia":"PisowniaÓu",
+                    "Postep":0,
+                    "IloscProb":0,
+                    "Bledy":0,
+                    "wynik":0,
+                    "OstatniaProba":0
                 },
                 {
                     "Pisownia":"PisowniaRż",
-                    "Postep":30,
-                    "IloscProb":1,
-                    "Bledy":6,
-                    "wynik":40,
+                    "Postep":0,
+                    "IloscProb":0,
+                    "Bledy":0,
+                    "wynik":0,
                     "OstatniaProba":0
+                }
+            ]
+        }
+    ],
+    "Testy":
+    [
+        {
+            "Pisownia":"PisowniaÓu",
+            "Pytania":
+            [
+                {
+                    "Czytane":false,
+                    "Wyboru":false,
+                    "Pytanie":"Jak poprawnie zapisać - \"ó\"wczesny?"
+                },
+                {
+                    "Czytane":false,
+                    "Wyboru":true,
+                    "Pytanie":"Które z podanych słów jest źle napisane?",
+                    "Odpowiedzi":["uwdzie","skrót","złotówka","skuwka"],
+                    "PoprawnaOdp":0
+                },
+                {
+                    "Czytane":true,
+                    "Pytanie":"Skuwka to element długopisu"
+                }
+            ]
+        },
+
+        {
+            "Pisownia":"PisowniaRż",
+            "Pytania":
+            [
+                {
+                    "Czytane":false,
+                    "Wyboru":false,
+                    "Pytanie":"Jak poprawnie zapisać - rowe\"rz\"ysta"
+                },
+                {
+                    "Czytane":false,
+                    "Wyboru":true,
+                    "Pytanie":"Które z podanych słów jest źle napisane?",
+                    "Odpowiedzi":["przeszłość","bżoza","chrząszcz","wrzesień"],
+                    "PoprawnaOdp":0
+                },
+                {
+                    "Czytane":true,
+                    "Pytanie":"Rowerzysta przyjechał do sprzedawcy"
                 }
             ]
         }
