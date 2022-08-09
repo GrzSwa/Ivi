@@ -94,19 +94,18 @@
             "Pytania":
             [
                 {
-                    "Czytane":false,
-                    "Wyboru":false,
-                    "Pytanie":"Jak poprawnie zapisać - \"ó\"wczesny?"
+                    "Typ":"PF",
+                    "Pytanie":"czy słowo \"ówczesny\" jest poprawnie zapisane?",
+                    "PoprawnaOdp":true
                 },
                 {
-                    "Czytane":false,
-                    "Wyboru":true,
+                    "Typ":"Wyboru",
                     "Pytanie":"Które z podanych słów jest źle napisane?",
                     "Odpowiedzi":["uwdzie","skrót","złotówka","skuwka"],
                     "PoprawnaOdp":0
                 },
                 {
-                    "Czytane":true,
+                    "Typ":"Czytane",
                     "Pytanie":"Skuwka to element długopisu"
                 }
             ]
@@ -117,19 +116,18 @@
             "Pytania":
             [
                 {
-                    "Czytane":false,
-                    "Wyboru":false,
-                    "Pytanie":"Jak poprawnie zapisać - rowe\"rz\"ysta"
+                    "Typ":"PF",
+                    "Pytanie":"czy słowo \"rowzerzysta\" jest poprawnie zapisane?",
+                    "PoprawnaOdp":false
                 },
                 {
-                    "Czytane":false,
-                    "Wyboru":true,
+                    "Typ":"Wyboru",
                     "Pytanie":"Które z podanych słów jest źle napisane?",
                     "Odpowiedzi":["przeszłość","bżoza","chrząszcz","wrzesień"],
-                    "PoprawnaOdp":0
+                    "PoprawnaOdp":1
                 },
                 {
-                    "Czytane":true,
+                    "Typ":"Czytane",
                     "Pytanie":"Rowerzysta przyjechał do sprzedawcy"
                 }
             ]
