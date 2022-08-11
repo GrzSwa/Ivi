@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, TextInput} from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, TextInput, FlatList} from 'react-native';
 import { Button } from '../components/Button';
 import { Loading } from '../components/Loading';
 import { Ionicons } from '@expo/vector-icons';
@@ -7,7 +7,7 @@ import ExamTopBar from '../components/ExamTopBar';
 import { db } from '../FirebaseConfig';
 import { ref, onValue, set } from "firebase/database";
 import * as Speech from 'expo-speech';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import CircularProgress from 'react-native-circular-progress-indicator';
 
 export default function ExamScreen({navigation, route}) {
 	const childRef = useRef();
@@ -19,7 +19,6 @@ export default function ExamScreen({navigation, route}) {
 	const [arrToCollectUniqueRandomValue, setArrToCollectUniqueRandomValue] = useState([0]);
 	const [changeText, setChangeText] = useState(null);
 	const [result, setResult] = useState([]);
-	const [renderCheckAnswer, setRenderCheckAnswer] = useState(false);
 
 	const getTimeFromExamTopBar = (time) =>{
 		setTimeFromExamTopBar(time);
@@ -128,21 +127,21 @@ export default function ExamScreen({navigation, route}) {
 					readingCount++;
 					i.answer == questions[i.idQuestions].questions 
 						? readingCorrect++
-						: mistake.push({correctAnswer:questions[i.idQuestions].questions, urAnswer: i.answer})
+						: mistake.push({questions:questions[i.idQuestions].questions, urAnswer: i.answer})
 				}
 			else if(questions[i.idQuestions].category == 'choice')
 				{
 					choiceCount++;
 					i.answer == questions[i.idQuestions].correctAnswer
 						? choiceCorrect++
-						: mistake.push({correctAnswer:questions[i.idQuestions].correctAnswer, urAnswer: i.answer})
+						: mistake.push({questions:questions[i.idQuestions].questions, correctAnswer:questions[i.idQuestions].correctAnswer, urAnswer: i.answer})
 				}
 			else
 				{
 					trueFalseCount++;
 					i.answer == questions[i.idQuestions].correctAnswer
 						? trueFalseCorrect++
-						: mistake.push({correctAnswer:questions[i.idQuestions].correctAnswer, urAnswer: i.answer})
+						: mistake.push({questions:questions[i.idQuestions].questions, correctAnswer:questions[i.idQuestions].correctAnswer, urAnswer: i.answer})
 				}
 		}
 		mistake.push({
@@ -154,7 +153,6 @@ export default function ExamScreen({navigation, route}) {
 			readingCorrect: readingCorrect
 		});
 		setResult(mistake);
-		setRenderCheckAnswer(true);
 	}
 
 	const renderAnswerBox = (idQuestions) =>{
@@ -163,24 +161,100 @@ export default function ExamScreen({navigation, route}) {
 				setTimeout(()=>{checkAnswer()},3000)
 				return(<Loading />)
 			}
-			else
+			else{
+				let allQuestions = result[result.length-1].allQueTrueFalse + result[result.length-1].allQueChoice + result[result.length-1].allQueReading;
+				let correct = result[result.length-1].trueFalseCorrect + result[result.length-1].choiceCorrect + result[result.length-1].readingCorrect;
 			return(
 				<View style={styles.BoxContainer}>
 					<View style={[styles.questionsBox, {alignItems:'center', justifyContent:'space-around' ,flexDirection:'row'}]}>
 						<View>
-							<Text>Pytania Tak/nie - {result[result.length-1].trueFalseCorrect+'/'+result[result.length-1].allQueTrueFalse}</Text>
-							<Text>Pytania Wyboru - {result[result.length-1].choiceCorrect+'/'+result[result.length-1].allQueChoice}</Text>
+							<Text>Pytania tak lub nie - {result[result.length-1].trueFalseCorrect+'/'+result[result.length-1].allQueTrueFalse}</Text>
+							<Text>Pytania wyboru - {result[result.length-1].choiceCorrect+'/'+result[result.length-1].allQueChoice}</Text>
 							<Text>Dyktanda - {result[result.length-1].readingCorrect+'/'+result[result.length-1].allQueReading}</Text>
 						</View>
 						<View>
-							<Text>asdasdsa</Text>
+							<CircularProgress
+								radius={50}
+								value={correct/allQuestions * 100}
+								maxValue={100}
+								fontSize={20}
+								valueSuffix={'%'}
+								activeStrokeColor={'#FE7E6D'}
+								inActiveStrokeColor={'#2F3A8F'}
+								inActiveStrokeOpacity={1}
+								progressValueColor={'#2F3A8F'}
+								inActiveStrokeWidth={15}
+								activeStrokeWidth={20}
+							/>
 						</View>
 					</View>
-					<View style={styles.answerBox}>
-						<Button title={'show Result'} onPress={()=>{console.log(result)}}/>
+					<View style={[styles.answerBox,{alignItems:'flex-start', justifyContent:'flex-start'}]}>
+						<FlatList 
+							data={result}
+							keyExtractor={(item)=>{item.index}}
+							renderItem={(item)=>{
+								if(item.index != result.length - 1){
+									if(typeof item.item.correctAnswer === 'boolean'){
+										return(
+											<View style={styles.mistakeBoxContainer}>
+												<View style={styles.mistakeBoxQuestions}>
+													<Text style={styles.mistakeBoxQuestionsText}>Pytanie</Text>
+													<Text style={styles.mistakeBoxQuestionsText}>{item.item.questions}</Text>
+												</View>
+												<View style={styles.mistakeBoxAnswerContainer}>
+													<View style={styles.mistakeBoxCorrect}>
+														<Text>Poprawna odpowiedź:</Text>
+														<Text>{item.item.correctAnswer === true ? 'Tak' : 'Nie'}</Text>
+													</View>
+													<View style={styles.mistakeBoxUrAnswer}>
+														<Text>Twoja odpowiedź:</Text>
+														<Text>{item.item.urAnswer === true ? 'Tak' : 'Nie'}</Text>
+													</View>
+												</View>
+											</View>
+										)
+									}
+									if(typeof item.item.correctAnswer === 'string'){
+										return(
+											<View style={styles.mistakeBoxContainer}>
+												<View style={styles.mistakeBoxQuestions}>
+													<Text style={styles.mistakeBoxQuestionsText}>Pytanie</Text>
+													<Text style={styles.mistakeBoxQuestionsText}>{item.item.questions}</Text>
+												</View>
+												<View style={styles.mistakeBoxAnswerContainer}>
+													<View style={styles.mistakeBoxCorrect}>
+														<Text>Poprawna odpowiedź:</Text>
+														<Text>{item.item.correctAnswer}</Text>
+													</View>
+													<View style={styles.mistakeBoxUrAnswer}>
+														<Text>Twoja odpowiedź:</Text>
+														<Text>{item.item.urAnswer != undefined ? item.item.urAnswer : 'Brak Odpowiedzi'}</Text>
+													</View>
+												</View>
+											</View>
+										)
+									}
+									if(item.item.correctAnswer === undefined){
+										return(
+											<View style={styles.mistakeBoxContainer}>
+												<View style={styles.mistakeBoxQuestions}>
+													<Text style={styles.mistakeBoxQuestionsText}>Zdanie brzmiało:</Text>
+													<Text style={styles.mistakeBoxQuestionsText}>{item.item.questions}</Text>
+												</View>
+												<View style={styles.mistakeBoxUrAnswer}>
+													<Text>Twoja odpowiedź:</Text>
+													<Text>{item.item.urAnswer != undefined ? item.item.urAnswer : 'Brak Odpowiedzi'}</Text>
+												</View>
+											</View>
+										)
+									}
+								}
+							}}
+						/>
 					</View>
 				</View> 
 			)
+		}
 		}
 			if(questions[idQuestions]?.category == 'TrueFalse'){
 				return(
@@ -215,6 +289,7 @@ export default function ExamScreen({navigation, route}) {
 								numberOfLines={4}
 								placeholder="Tutaj wpisz usłyszny tekst"
 								onChangeText={(value)=>{setChangeText(value)}}
+								autoCorrect={false}
 							/>
 							<Button 
 								title={"Gotowe"} 
@@ -252,7 +327,6 @@ export default function ExamScreen({navigation, route}) {
 			}
 	}
 
-	
 
 	useEffect(()=>{
 		getQuestions();
@@ -354,5 +428,40 @@ const styles = StyleSheet.create({
 		borderWidth:1,
 		padding:5,
 		marginBottom:10
+	},
+
+	mistakeBoxContainer:{
+		backgroundColor:'#2F3A8F',
+		marginBottom:10,
+	},
+
+	mistakeBoxQuestions:{
+		backgroundColor:'#2F3A8F',
+		alignItems:'center',
+		padding:10,
+	},
+
+	mistakeBoxAnswerContainer:{
+		flexDirection:'row',
+	},
+
+	mistakeBoxCorrect:{
+		backgroundColor:'#CCD1E4',
+		flex:1,
+		padding:10,
+		alignItems:'center',
+		borderRightWidth:1,
+		borderRightColor:'#fff'
+	},
+
+	mistakeBoxUrAnswer:{
+		backgroundColor:'#CCD1E4',
+		flex:1,
+		padding:10,
+		alignItems:'center'
+	},
+
+	mistakeBoxQuestionsText:{
+		color:'#fff'
 	}
   });

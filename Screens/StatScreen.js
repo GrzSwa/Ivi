@@ -12,6 +12,7 @@ export default function StatScreen() {
     const [amount, setAmount] = useState(0);
     const [stat, setStat] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [counter, setCounter] = useState(0);
     const auth = getAuth();
 
     function getAmountExam(){
@@ -50,6 +51,8 @@ export default function StatScreen() {
                     repetitions = data[id].PostepTematow[j].Pisownia;
                 }
                 avg += data[id].PostepTematow[j].wynik;
+                if(avg != 0)
+                    setCounter(cur=>cur + 1);
             }
             arr.push({
                 time: data[id].NajlepszyCzas,
@@ -77,7 +80,7 @@ if(!loading)
                 <View style={styles.progress}>
                     <CircularProgress //https://www.npmjs.com/package/react-native-circular-progress-indicator
                         radius={100}
-                        value={progress}
+                        value={counter}
                         maxValue={amount}
                         fontSize={20}
                         valueSuffix={'/'+amount}
