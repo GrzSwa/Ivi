@@ -15,8 +15,8 @@ export default function RegisterScreen({navigation}) {
     function writeUserData(userNumber,email) {
         set(ref(db, '/Konta/' + userNumber), {
             Email: email,
-            NajlepszyCzas: "00:00:00",
-            NajlepszyTemat : "",
+            NajlepszyCzas: "-",
+            NajlepszyTemat : "-",
             Strike: 0,
             PostepTematow: topicImprove
         });

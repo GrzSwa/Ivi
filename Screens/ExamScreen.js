@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, TextInput, FlatList} from 'react-native';
-import { Button } from '../components/Button';
+import { Button, ButtonGroup } from '../components/Button';
 import { Loading } from '../components/Loading';
 import { Ionicons } from '@expo/vector-icons';
 import ExamTopBar from '../components/ExamTopBar';
@@ -20,9 +20,8 @@ export default function ExamScreen({navigation, route}) {
 	const [changeText, setChangeText] = useState(null);
 	const [result, setResult] = useState([]);
 
-	const getTimeFromExamTopBar = (time) =>{
-		setTimeFromExamTopBar(time);
-	}
+	const getTimeFromExamTopBar = (time) =>{setTimeFromExamTopBar(time);}
+
 
 	const speak = (text) => {
 		const whatSpeak = text;
@@ -139,9 +138,11 @@ export default function ExamScreen({navigation, route}) {
 			else
 				{
 					trueFalseCount++;
-					i.answer == questions[i.idQuestions].correctAnswer
+					let tmp = '';
+					i.answer.toLowerCase() == 'tak' ? tmp = true : tmp = false
+					tmp == questions[i.idQuestions].correctAnswer
 						? trueFalseCorrect++
-						: mistake.push({questions:questions[i.idQuestions].questions, correctAnswer:questions[i.idQuestions].correctAnswer, urAnswer: i.answer})
+						: mistake.push({questions:questions[i.idQuestions].questions, correctAnswer:questions[i.idQuestions].correctAnswer, urAnswer: tmp})
 				}
 		}
 		mistake.push({
@@ -160,8 +161,13 @@ export default function ExamScreen({navigation, route}) {
 			if(!result.length){
 				setTimeout(()=>{checkAnswer()},3000)
 				return(<Loading />)
-			}
-			else{
+			}else if(result.length == 1){
+				return(
+					<View style={[styles.BoxContainer,{justifyContent:'center'}]}>
+						<Text>Nie udzielono odpowiedzi na żadne pytanie :/ </Text>
+					</View>
+				)
+			}else{
 				let allQuestions = result[result.length-1].allQueTrueFalse + result[result.length-1].allQueChoice + result[result.length-1].allQueReading;
 				let correct = result[result.length-1].trueFalseCorrect + result[result.length-1].choiceCorrect + result[result.length-1].readingCorrect;
 			return(
@@ -263,8 +269,15 @@ export default function ExamScreen({navigation, route}) {
 							<Text>{questions[idQuestions]?.questions}</Text>
 						</View>
 						<View style={styles.answerBox}>
-							<Button title={"Tak"} styles={styles.btn} fontStyle={styles.btnFont} onPress={()=>{addAnswer(idQuestions,true)}}/>
-							<Button title={"Nie"} styles={styles.btn} fontStyle={styles.btnFont} onPress={()=>{addAnswer(idQuestions, false)}} />
+							<ButtonGroup 
+								buttonContainerStyle={styles.btnContainer}
+								fontStyle={styles.btnFont}
+								style={styles.btn}
+								styleFocused={styles.btnFocused}
+								buttonsLabel={["Tak","Nie"]}
+								index={idQuestions}
+								onPress={addAnswer}
+							/>
 						</View>
 					</View> 
 				)
@@ -305,32 +318,34 @@ export default function ExamScreen({navigation, route}) {
 				)
 			
 			if(questions[idQuestions]?.category == 'choice'){
+				let arr = []
+				questions[idQuestions]?.answer.map((item, index) =>{arr.push(item)})
 				return(
 					<View style={styles.BoxContainer}>
 						<View style={styles.questionsBox}>
 							<Text>{questions[idQuestions]?.questions}</Text>
 						</View>
 						<View style={styles.answerBoxForChoice}>
-							{questions[idQuestions]?.answer.map((item, index) =>{
-								return(
-								<View key={index}>
-									<Button title={item} 
-										styles={[styles.answerBoxForChoiceBtn]} 
-										fontColor={'#fff'} 
-										onPress={()=>{addAnswer(idQuestions,item)}}/>
-								</View>
-								)
-							})}
+							<ButtonGroup 
+								buttonContainerStyle={{flexDirection:'column'}}
+								fontStyle={{fontSize:15, color:'#fff'}}
+								style={styles.answerBoxForChoiceBtn}
+								styleFocused={styles.btnFocusedForChoice}
+								buttonsLabel={arr}
+								index={idQuestions}
+								onPress={addAnswer}
+							/>
+						
 						</View>
 					</View>
 				)
 			}
 	}
 
-
 	useEffect(()=>{
 		getQuestions();
 	},[])
+
 	return ( 
 	    <SafeAreaView style={styles.container}>
 			<ExamTopBar 
@@ -382,7 +397,7 @@ const styles = StyleSheet.create({
 		justifyContent:'space-evenly',
 		alignItems:'flex-end',
 	},
-
+	
 	answerBoxForChoice:{
 		width:'90%',
 		height:'60%',
@@ -390,9 +405,20 @@ const styles = StyleSheet.create({
 		justifyContent:'space-evenly'
 	},
 
+	btnFocusedForChoice:{
+		backgroundColor:'gold',
+		padding:25,
+		marginBottom:10
+	},
+
 	answerBoxForChoiceBtn:{
 		backgroundColor:'#2F3A8F',
-		padding:25
+		padding:25,
+		marginBottom:10
+	},
+
+	btnContainer:{
+		flexDirection:'row'
 	},
 
 	btn:{
@@ -400,13 +426,26 @@ const styles = StyleSheet.create({
 		height:70,
 		margin:10,
 		borderRadius:25,
-		backgroundColor:'#2F3A8F'
+		backgroundColor:'#2F3A8F',
+		justifyContent:'center',
+		alignItems:'center'
+	},
+
+	btnFocused:{
+		width:150, 
+		height:70,
+		margin:10,
+		borderRadius:25,
+		backgroundColor:'gold',
+		justifyContent:'center',
+		alignItems:'center'
 	},
 
 	btnFont:{
 		fontSize:18,
 		color:'#fff'
 	},
+
 	changeQuestionsBtn:{
 		backgroundColor:'#FE7E6D',
 		height:'5%',
