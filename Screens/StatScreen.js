@@ -8,11 +8,10 @@ import { getAuth } from 'firebase/auth';
 import { ScrollView } from 'react-native-gesture-handler';
 
 export default function StatScreen() {
-    const [progress, setProgress] = useState(1);
+    const [progress, setProgress] = useState(0);
     const [amount, setAmount] = useState(0);
     const [stat, setStat] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [counter, setCounter] = useState(0);
     const auth = getAuth();
 
     function getAmountExam(){
@@ -36,6 +35,7 @@ export default function StatScreen() {
             var avg = 0;
             var repetitions = '';
             var arr = [];
+            var counter = 0;
             for(let i in data){
                 if(auth.currentUser.email == data[i].Email){
                     var id = i;
@@ -51,8 +51,8 @@ export default function StatScreen() {
                     repetitions = data[id].PostepTematow[j].Pisownia;
                 }
                 avg += data[id].PostepTematow[j].wynik;
-                if(avg != 0)
-                    setCounter(cur=>cur + 1);
+                if(data[id].PostepTematow[j].wynik != 0)
+                    counter++;
             }
             arr.push({
                 time: data[id].NajlepszyCzas,
@@ -61,10 +61,11 @@ export default function StatScreen() {
                 strike: data[id].Strike,
                 mistake: mistake,
                 atempt: atempt,
-                repetitions:repetitions.replace("Pisownia","")
+                repetitions:atempt == 0 ? '-' : repetitions.replace("Pisownia","")
             });
             setStat(arr);
             setLoading(false);
+            setProgress(counter);
         })
     }
 
@@ -80,7 +81,7 @@ if(!loading)
                 <View style={styles.progress}>
                     <CircularProgress //https://www.npmjs.com/package/react-native-circular-progress-indicator
                         radius={100}
-                        value={counter}
+                        value={progress}
                         maxValue={amount}
                         fontSize={20}
                         valueSuffix={'/'+amount}

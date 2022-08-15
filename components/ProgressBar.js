@@ -5,6 +5,9 @@ export function ProgressBar({width, height, firstColor, secondColor, progress, r
     const [prog, setProg] = useState(0);
 
     useEffect(()=>{
+        if(progress < prog)
+            setProg(progress)
+        else
         for (let i = prog; i <= progress; i++) {
             setTimeout(() => {
                 setProg(i);

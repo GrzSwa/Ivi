@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {Text, TouchableOpacity, View, Pressable} from 'react-native';
 
 
 export const Button = ({borderRadius, onPress, backgroundColor, fontColor, title, width, height, fontSize, styles, fontStyle}) => (
@@ -34,24 +34,24 @@ export const Button = ({borderRadius, onPress, backgroundColor, fontColor, title
 export const ButtonGroup = (props) => {
 
     const[isFocused, setIsFocused] = useState(undefined);
+    const[questionsId, setQuestionsId] = useState(0);
     const handleClick = (item, index) =>{
         setIsFocused(index)
+        setQuestionsId(props.index)
         props.onPress(props.index, item);
     }
 
     return(
     <View style={props.buttonContainerStyle}>
         {
-            props.buttonsLabel.map( (btn, index) => {
-                return(
-                    <TouchableOpacity
+            props.buttonsLabel.map( (btn, index) => (
+                    <Pressable
                     key={index} 
                     onPress={()=>handleClick(btn,index)}
-                    style={isFocused === index ? props.styleFocused : props.style}>
+                    style={isFocused === index && questionsId === props.index ? props.styleFocused : props.style}>
                         <Text style={props.fontStyle}>{btn}</Text>
-                    </TouchableOpacity>
-                )
-            })
+                    </Pressable>
+            ))
         }
     </View>
     )

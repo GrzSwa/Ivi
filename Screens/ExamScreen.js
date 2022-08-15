@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, TextInput, FlatList} from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, TextInput, FlatList, BackHandler, Alert} from 'react-native';
 import { Button, ButtonGroup } from '../components/Button';
 import { Loading } from '../components/Loading';
 import { Ionicons } from '@expo/vector-icons';
 import ExamTopBar from '../components/ExamTopBar';
 import { db } from '../FirebaseConfig';
-import { ref, onValue, set } from "firebase/database";
+import { ref, onValue, update } from "firebase/database";
 import * as Speech from 'expo-speech';
 import CircularProgress from 'react-native-circular-progress-indicator';
 
@@ -18,14 +18,15 @@ export default function ExamScreen({navigation, route}) {
 	const [answer, setAnswer] = useState([]);
 	const [arrToCollectUniqueRandomValue, setArrToCollectUniqueRandomValue] = useState([0]);
 	const [changeText, setChangeText] = useState(null);
+	const [doneChangeText, setDoneChangeText] = useState(false)
 	const [result, setResult] = useState([]);
+	const [idExam, setIdExam] = useState(undefined);
 
 	const getTimeFromExamTopBar = (time) =>{setTimeFromExamTopBar(time);}
 
-
 	const speak = (text) => {
 		const whatSpeak = text;
-		Speech.speak(whatSpeak,{rate:0.8});
+		Speech.speak(whatSpeak,{rate:0.9});
 	}
 
 	function getQuestions(){
@@ -37,6 +38,7 @@ export default function ExamScreen({navigation, route}) {
 			for(let i in data){
 				if(data[i].Pisownia.toLowerCase().replace("pisownia","") == route.params.id.toLowerCase()){
 					idE = i;
+					setIdExam(i);
 					setQuestionsAmount(data[i].Pytania.length);
 					break;
 				}
@@ -112,6 +114,53 @@ export default function ExamScreen({navigation, route}) {
 			setAnswer([...oldArr, {idQuestions:id, answer: value}]);
 	}
 
+	const updateExamStatistic = (data) =>{
+		const up0 = ref(db,'Konta/'+ data.user);
+		const up1 = ref(db,'Konta/'+ data.user+'/PostepTematow/'+data.exam)
+		let arr = {};
+		let write = {};
+		let tmp = {};
+		onValue(up0,(snapshot)=>{
+			arr["NajlepszyCzas"] = snapshot.val().NajlepszyCzas;
+			arr["NajlepszyTemat"] = snapshot.val().NajlepszyTemat;
+			arr["PostepTematow"] = [snapshot.val().PostepTematow[data.exam]]  
+		})
+
+		write["NajlepszyCzas"] = arr.NajlepszyCzas == '-' || arr.NajlepszyCzas < data.time 
+									? data.time
+									: arr.NajlepszyCzas;
+
+		write["NajlepszyTemat"] = arr.NajlepszyTemat == '-'|| arr.PostepTematow[0].wynik < (Math.ceil(data.correct/data.allQuestions * 100)) 
+									? arr.PostepTematow[0].Pisownia.toLowerCase().replace("pisownia","")
+									: arr.NajlepszyTemat
+
+		tmp["Bledy"] = arr.PostepTematow[0].Bledy == 0 || arr.PostepTematow[0].Bledy < data.allQuestions - data.correct
+						? data.allQuestions - data.correct
+						: arr.PostepTematow[0].Bledy 
+
+		tmp["OstatniaProba"] = arr.PostepTematow[0].wynik > (Math.ceil(data.correct/data.allQuestions * 100)) 
+								? (Math.ceil(data.correct/data.allQuestions * 100)) 
+								: arr.PostepTematow[0].OstatniaProba
+		
+		tmp["wynik"] = arr.PostepTematow[0].wynik < (Math.ceil(data.correct/data.allQuestions * 100))
+								? (Math.ceil(data.correct/data.allQuestions * 100))
+								: arr.PostepTematow[0].wynik
+
+		tmp["IloscProb"] = arr.PostepTematow[0].IloscProb + 1
+		write["PostepTematow"] = [tmp]
+
+		//console.log(write)
+		update(up0,{NajlepszyCzas: write.NajlepszyCzas, NajlepszyTemat: write.NajlepszyTemat})
+		update(up1,
+			{
+				wynik:Math.ceil(data.correct/data.allQuestions * 100), 
+				IloscProb: write.PostepTematow[0].IloscProb, 
+				Bledy: write.PostepTematow[0].Bledy,
+				OstatniaProba: write.PostepTematow[0].OstatniaProba 
+			}
+		)
+	}
+
 	const checkAnswer = () =>{
 		let mistake = [];
 		let trueFalseCorrect = 0;
@@ -145,15 +194,29 @@ export default function ExamScreen({navigation, route}) {
 						: mistake.push({questions:questions[i.idQuestions].questions, correctAnswer:questions[i.idQuestions].correctAnswer, urAnswer: tmp})
 				}
 		}
-		mistake.push({
-			allQueTrueFalse: trueFalseCount,
-			allQueChoice: choiceCount,
-			allQueReading: readingCount,
-			trueFalseCorrect: trueFalseCorrect,
-			choiceCorrect: choiceCorrect,
-			readingCorrect: readingCorrect
-		});
+		mistake.push(
+			{
+				allQueTrueFalse: trueFalseCount,
+				allQueChoice: choiceCount,
+				allQueReading: readingCount,
+				trueFalseCorrect: trueFalseCorrect,
+				choiceCorrect: choiceCorrect,
+				readingCorrect: readingCorrect,
+				allIsCorrect: trueFalseCount == trueFalseCorrect && choiceCount == choiceCorrect && readingCount == readingCorrect ? true : false
+			}		
+		);
+		
+		
 		setResult(mistake);
+		updateExamStatistic(
+			{
+				user:route.params.user,
+				time:TimeFromExamTopBar,
+				exam: idExam,
+				allQuestions: trueFalseCount+choiceCount+readingCount, 
+				correct:trueFalseCorrect+choiceCorrect+readingCorrect,
+			}
+		)
 	}
 
 	const renderAnswerBox = (idQuestions) =>{
@@ -161,7 +224,8 @@ export default function ExamScreen({navigation, route}) {
 			if(!result.length){
 				setTimeout(()=>{checkAnswer()},3000)
 				return(<Loading />)
-			}else if(result.length == 1){
+			}else if(!result[result.length-1].allIsCorrect){
+				console.log(result)
 				return(
 					<View style={[styles.BoxContainer,{justifyContent:'center'}]}>
 						<Text>Nie udzielono odpowiedzi na żadne pytanie :/ </Text>
@@ -282,7 +346,7 @@ export default function ExamScreen({navigation, route}) {
 					</View> 
 				)
 			}
-			if(questions[idQuestions]?.category == 'reading')
+			if(questions[idQuestions]?.category == 'reading'){
 				return(
 					<View style={styles.BoxContainer}>
 						<View style={styles.questionsBox}>
@@ -306,16 +370,17 @@ export default function ExamScreen({navigation, route}) {
 							/>
 							<Button 
 								title={"Gotowe"} 
-								backgroundColor={'#2F3A8F'}
+								backgroundColor={!doneChangeText ? '#2F3A8F' : 'gold'}
 								width={'40%'}
 								height={'10%'}
 								fontColor={'#fff'}
-								onPress={()=>{addAnswer(idQuestions,changeText)}}
+								onPress={()=>{setDoneChangeText(true);addAnswer(idQuestions,changeText)}}
 							/>
 						</View>
 							
 					</View>
 				)
+			}
 			
 			if(questions[idQuestions]?.category == 'choice'){
 				let arr = []
@@ -342,8 +407,28 @@ export default function ExamScreen({navigation, route}) {
 			}
 	}
 
-	useEffect(()=>{
+	const backAction =()=>{
+		Alert.alert(
+			"Przerwij Test",
+			"Czy napewno chcesz przerwać test?",
+			[
+				{
+					text:'Nie',
+					onPress:()=>null
+				},
+				{
+					text:'Przerwij',
+					onPress:()=>{navigation.goBack()},
+					style:'cancel'
+				}
+			]
+		)
+		return true
+	}
+
+	useEffect(()=>{	
 		getQuestions();
+		BackHandler.addEventListener("hardwareBackPress",backAction)
 	},[])
 
 	return ( 
@@ -359,7 +444,7 @@ export default function ExamScreen({navigation, route}) {
 				<Button 
 					title={ category == -1 ? 'Powrót do testów' : 'Dalej' } 
 					styles={ styles.changeQuestionsBtnStyle }  
-					onPress={ category != -1 ? ()=>{setCategory(generateRandomQuestions())} : ()=> {navigation.goBack()} }
+					onPress={ category != -1 ? ()=>{setCategory(generateRandomQuestions()); setDoneChangeText(false)} : ()=> {navigation.goBack()} }
 				/>
 			</View> 
 		</SafeAreaView>

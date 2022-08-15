@@ -8,7 +8,9 @@ import { ProgressBar } from '../components/ProgressBar';
 
 export default function HomeScreen({navigation, route}) {
 	const [data, setData] = useState([]);
-	const [loading, setLoading] = useState(true)
+	const [loading, setLoading] = useState(true);
+	const [idUser, setIduser] = useState(undefined);
+	const [idTopic, setIdTopic]= useState(undefined);
 	const auth = getAuth();
 
 	function getTopic(){
@@ -19,8 +21,10 @@ export default function HomeScreen({navigation, route}) {
 				var account = snapshot.val()["Konta"];
 				for(let i in account){
 					if(auth.currentUser.email.toLowerCase() == account[i].Email.toLowerCase()){
+						setIduser(i);
 						for(let j in topic){
 							if(account[i].PostepTematow[j].Pisownia.toLowerCase() == topic[j].Pisownia.toLowerCase()){
+								setIdTopic(i);
 								arr.push({
 									key: topic[j].Pisownia,
 									progress: account[i].PostepTematow[j].Postep,
@@ -43,7 +47,7 @@ export default function HomeScreen({navigation, route}) {
 
 
 	const renderItem = ({ item }) =>(
-		<TouchableOpacity onPress={()=>{navigation.navigate("Topic",{data:item})}}>
+		<TouchableOpacity onPress={()=>{navigation.navigate("Topic",{data:item, db:ref(db,'/Konta/'+idUser+'/PostepTematow/'+idTopic)})}}>
 			<View style={styles.listStyleContainer}>
 				<View style={styles.picture}>
 					<Text>IMG</Text>

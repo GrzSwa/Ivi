@@ -4,6 +4,7 @@ import { LessonBox } from '../components/LessonBox';
 import { TopicTopBar } from '../components/TopicTopBar';
 import { ProgressBar } from '../components/ProgressBar';
 import { Ionicons } from '@expo/vector-icons';
+import { update } from 'firebase/database';
 
 const WIDTH = Dimensions.get("screen").width;
 
@@ -15,10 +16,15 @@ export default function TopicScreen({navigation, route}) {
 	const [txt, setTxt] = useState('');
 	const [showTxt, setShowTxt] = useState(20);
 
+	useEffect(()=>{
+		update(route.params.db,{Postep:progress})
+	},[progress])
+
 	async function redo(){
 		if(changer != route.params.data.rules.length - 1){
 				setChanger((current) => current + 1)
 				setProgress((current) => current  + calc);
+				
 			}			
 	}
 
@@ -30,7 +36,6 @@ export default function TopicScreen({navigation, route}) {
 			setProgress((current) => current - calc);
 		}			
 	}
-
 		return (
 			<SafeAreaView style={styles.container}>
 				<TopicTopBar title={route.params.data.key} onPress={()=>{navigation.goBack()}}/>

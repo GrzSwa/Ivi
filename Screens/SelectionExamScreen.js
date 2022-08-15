@@ -17,6 +17,7 @@ export default function SelectionExamScreen({navigation}) {
 				for(let i in exam){
 					if(exam[i].Email.toLowerCase() == auth.currentUser.email.toLowerCase()){
 						idU = i;
+						setIdUser(i);
 						break;
 					}
 				}
@@ -39,6 +40,7 @@ export default function SelectionExamScreen({navigation}) {
 
 	const [data, setData] = useState([]);
 	const [loading, setLoading] = useState(true);
+	const [idUser, setIdUser] = useState(undefined);
 	const auth = getAuth();
   
 	const renderItem = ({ item }) => {
@@ -47,7 +49,7 @@ export default function SelectionExamScreen({navigation}) {
                 <Beginning
                     item={item}
                     style={styles.examListStyleContainer}
-                    onPress={()=>{navigation.navigate("Exam",{id:item.key})}}
+                    onPress={()=>{navigation.navigate("Exam",{id:item.key, user:idUser})}}
                 />
             );
         }if(item.atempt > 0 && item.result < 100){
@@ -55,7 +57,7 @@ export default function SelectionExamScreen({navigation}) {
                 <Tried
                     item={item}
                     style={styles.examListStyleContainer}
-                    onPress={()=>{navigation.navigate("Exam",{id:item.key})}}
+                    onPress={()=>{navigation.navigate("Exam",{id:item.key, user:idUser})}}
                 />
             );
         }if(item.result == 100){
