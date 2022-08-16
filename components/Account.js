@@ -14,7 +14,7 @@ const Account = props => {
                 <View style={styles.btn}>
                     <Button 
                         title="Wyloguj" 
-                        onPress={() => {signOut(auth), props.navigation.navigate("Login")}}
+                        onPress={() => {signOut(auth)}}
                         backgroundColor={'#DA0037'}
                         width={200}
                         height={30}

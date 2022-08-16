@@ -30,6 +30,7 @@
     "react-native": "0.68.2",
     "react-native-check-box": "^2.1.7",
     "react-native-circular-progress-indicator": "^4.3.0",
+    "react-native-drop-shadow": "^0.0.5",
     "react-native-element-timer": "^2.0.0",
     "react-native-gesture-handler": "~2.2.1",
     "react-native-ionicons": "^4.6.5",

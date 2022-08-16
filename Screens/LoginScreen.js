@@ -1,19 +1,16 @@
 import {useEffect, useState} from 'react';
 import { useForm, Controller } from "react-hook-form";
-import { StyleSheet, Text, View, SafeAreaView, Platform, TextInput, Button, Alert, TouchableOpacity, StatusBar, Image} from 'react-native';
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword} from 'firebase/auth';
+import { StyleSheet, Text, View, SafeAreaView, Platform, TextInput, Alert, TouchableOpacity, StatusBar, Image} from 'react-native';
+import { signInWithEmailAndPassword} from 'firebase/auth';
 import { getDownloadURL, getStorage, ref } from "firebase/storage";
 
 const SB_HEIGHT = StatusBar.currentHeight;
 
 export default function LoginScreen({navigation, route}) {
-    const auth = getAuth();
-    const [ user, setUser ] = useState();
     const { control, handleSubmit } = useForm();
     const [icon, setIcon] = useState(undefined);
 
     useEffect(() => {
-        onAuthStateChanged(auth, (user) => { {user ? setUser(user) : setUser(undefined)} })
         const getImage = async () =>{
             const storage = getStorage();
             const pathReference = ref(storage, '/icon.png');
@@ -25,12 +22,10 @@ export default function LoginScreen({navigation, route}) {
     },[])
 
     const onSubmit = (data) =>{
-        console.log(data);
-        {signInWithEmailAndPassword(auth, data.Login, data.password).then((cred) => {
-            navigation.navigate("Home", {user: cred});
+        {signInWithEmailAndPassword(route.params.auth, data.Login, data.password).then((cred) => {
             console.log(cred.user.email);
         }).catch((error) => {
-            Alert.alert("Błąd logowania firebase","Niepoprawny login lub hasło",[
+            Alert.alert("Niepoprawny login lub hasło",error.message[
                 {text: "Cancel",},
                 { text: "OK", }
                 ]
@@ -38,16 +33,16 @@ export default function LoginScreen({navigation, route}) {
         })}
     };
     
-
-    if (!user){
         return (
             <SafeAreaView style={styles.container}>   
             <View>
+                
                 <View style={styles.iconBox}>
                     <View style={styles.icon}>
                         <Image source={{uri:icon}} style={{width:'100%',height:'100%'}}/>
-                    </View>
+                    </View>        
                 </View>
+                
                 <View style={styles.FormBox}>
                     <Controller
                         control={control}
@@ -80,7 +75,7 @@ export default function LoginScreen({navigation, route}) {
                             />
                         }
                     />
-                    <TouchableOpacity onPress={() => {navigation.navigate("Reset",{auth: auth})}}>
+                    <TouchableOpacity onPress={() => {navigation.navigate("Reset",{auth: route.params.auth})}}>
                         <Text style={styles.actionBtn}>Zapomniałem/am hasła</Text>
                     </TouchableOpacity>
                     
@@ -96,13 +91,6 @@ export default function LoginScreen({navigation, route}) {
             </View>
         </SafeAreaView>
         );
-    }else{
-        return(
-            <View>
-                {navigation.navigate("Home")}
-            </View>
-        )
-    }
 }
 
 

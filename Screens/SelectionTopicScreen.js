@@ -10,12 +10,15 @@ export default function HomeScreen({navigation, route}) {
 	const [data, setData] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [idUser, setIduser] = useState(undefined);
-	const [idTopic, setIdTopic]= useState(undefined);
+	const [idTopic, setIdTopic]= useState([]);
 	const auth = getAuth();
 
 	function getTopic(){
 		const readData = ref(db,'/');
 			onValue(readData, (snapshot)=>{
+				if(auth.currentUser == null)
+					return setLoading(true)
+				else{
 				var arr = [];
 				var topic = snapshot.val()["Tematy"];
 				var account = snapshot.val()["Konta"];
@@ -24,7 +27,7 @@ export default function HomeScreen({navigation, route}) {
 						setIduser(i);
 						for(let j in topic){
 							if(account[i].PostepTematow[j].Pisownia.toLowerCase() == topic[j].Pisownia.toLowerCase()){
-								setIdTopic(i);
+								setIdTopic(e => [...new Set([...e,topic[j].Pisownia])])
 								arr.push({
 									key: topic[j].Pisownia,
 									progress: account[i].PostepTematow[j].Postep,
@@ -38,16 +41,16 @@ export default function HomeScreen({navigation, route}) {
 				}
 				setData(arr);
 				setLoading(false);
-			})    
+			}})   
 	}
 
 	useEffect(()=>{
 		getTopic();
 	},[])
-
-
+	
 	const renderItem = ({ item }) =>(
-		<TouchableOpacity onPress={()=>{navigation.navigate("Topic",{data:item, db:ref(db,'/Konta/'+idUser+'/PostepTematow/'+idTopic)})}}>
+
+		<TouchableOpacity key={item.key}onPress={()=>{navigation.navigate("Topic",{data:item, db:ref(db,'/Konta/'+idUser+'/PostepTematow/'+idTopic.indexOf(item.key))})}}>
 			<View style={styles.listStyleContainer}>
 				<View style={styles.picture}>
 					<Text>IMG</Text>

@@ -7,7 +7,7 @@ import { ref, onValue } from "firebase/database";
 import { getAuth } from 'firebase/auth';
 import { ScrollView } from 'react-native-gesture-handler';
 
-export default function StatScreen() {
+export default function StatScreen({navigation,route}) {
     const [progress, setProgress] = useState(0);
     const [amount, setAmount] = useState(0);
     const [stat, setStat] = useState([]);
@@ -28,6 +28,9 @@ export default function StatScreen() {
     function getStatistic(){
         const readData = ref(db,'/Konta');
         onValue(readData,(snapshot)=>{
+            if(auth.currentUser == null)
+					return setLoading(true)
+			else{
             var data = snapshot.val();
             var id = 0;
             var mistake = 0;
@@ -37,7 +40,7 @@ export default function StatScreen() {
             var arr = [];
             var counter = 0;
             for(let i in data){
-                if(auth.currentUser.email == data[i].Email){
+                if(auth.currentUser.email.toLowerCase() == data[i].Email.toLowerCase()){
                     var id = i;
                 }
             }
@@ -63,17 +66,17 @@ export default function StatScreen() {
                 atempt: atempt,
                 repetitions:atempt == 0 ? '-' : repetitions.replace("Pisownia","")
             });
+            
             setStat(arr);
             setLoading(false);
             setProgress(counter);
-        })
+        }})
     }
 
     useEffect(()=>{
         getAmountExam();
         getStatistic();
     },[])
-
 if(!loading)
     return (
         <ScrollView>

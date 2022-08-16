@@ -6,12 +6,10 @@ import { db } from '../FirebaseConfig';
 import { ref, set, onValue } from "firebase/database";
 import { useEffect, useState } from 'react';
 
-export default function RegisterScreen({navigation}) {
-    const auth = getAuth();
+export default function RegisterScreen({navigation,route}) {
     const [newUserDatabaseSpace, SetNewUserDatabaseSpace] = useState(0);
     const [topicImprove, setTopicImprove] = useState([]);
     const { control, handleSubmit} = useForm();
-    
     function writeUserData(userNumber,email) {
         set(ref(db, '/Konta/' + userNumber), {
             Email: email,
@@ -23,14 +21,13 @@ export default function RegisterScreen({navigation}) {
     }
 
     const onSubmit = (data) =>{
-        {createUserWithEmailAndPassword(auth,data.email,data.password).then((cred) => {
-            updateProfile(auth.currentUser, {displayName:data.userName});
+        {createUserWithEmailAndPassword(route.params.auth,data.email,data.password).then((cred) => {
+            updateProfile(route.params.auth.currentUser, {displayName:data.userName});
             Alert.alert("Konto stworzone! :D","Wysłalismy link potwierdzający założenie konta na twój adres email",
             [
                 { text: "OK", }
             ]
             );
-            navigation.navigate("Login", {flag: true})
         }).catch((error) => {
             if(error.code == 'auth/email-already-in-use'){
                 Alert.alert("Błąd","Istnieje już konto o tym adresie email",

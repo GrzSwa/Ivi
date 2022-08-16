@@ -1,5 +1,7 @@
 import 'react-native-gesture-handler';
 import './FirebaseConfig';
+import { getAuth, onAuthStateChanged} from 'firebase/auth';
+import {useEffect, useState} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -22,64 +24,85 @@ const Tab = createMaterialTopTabNavigator();
 function Draw(){
     return(
         <Drawer.Navigator screenOptions={{headerShown:false, drawerPosition:'right'}} drawerContent={props => <Account {...props}/>}>
-            <Drawer.Screen name="Drawer" component={TabNav} />
+            <Drawer.Screen 
+                name="Drawer" 
+                component={TabNav} 
+            />
         </Drawer.Navigator>
     )
 }
 
 function TabNav() {
+    const auth = getAuth();
     return (
         <Tab.Navigator tabBar={props => <TopBar {...props}/>}>
-            <Tab.Screen name="Tematy" component={SelectionTopicScreen} />
-            <Tab.Screen name="Testy" component={SelectionExamScreen} />
-            <Tab.Screen name="Statystyki" component={StatScreen} />
+            <Tab.Screen name="Tematy" component={SelectionTopicScreen} initialParams={{auth:auth}}/>
+            <Tab.Screen name="Testy" component={SelectionExamScreen} initialParams={{auth:auth}}/>
+            <Tab.Screen name="Statystyki" component={StatScreen} initialParams={{auth:auth}}/>
         </Tab.Navigator>
     );
   }
 
+
 export default function App() {
-    return (
-        <NavigationContainer>
-            <Stack.Navigator initialRouteName="Login">
+    const auth = getAuth();
+    const [ user, setUser ] = useState();
+    useEffect(()=>{
+        onAuthStateChanged(auth, (user) => { user ? setUser(user) : setUser(undefined)})
+    },[])
 
-                <Stack.Screen
-                    name="Login"
-                    component={LoginScreen}
-                    options={{headerShown:false}}
-                />
+    if(!user){
+        return(
+            <NavigationContainer>
+                <Stack.Navigator initialRouteName="Login">
+                    <Stack.Screen
+                        name="Login"
+                        component={LoginScreen}
+                        options={{headerShown:false}}
+                        initialParams={{auth:auth}}
+                    />
 
-                <Stack.Screen
-                    name="Register"
-                    component={RegisterScreen}
-                    options={{headerBackTitle:'Cofnij', title: 'Cofnij', headerStyle:{backgroundColor:'#FEECE9'}}}
-                />
+                    <Stack.Screen
+                        name="Register"
+                        component={RegisterScreen}
+                        options={{headerBackTitle:'Cofnij', title: 'Cofnij', headerStyle:{backgroundColor:'#FEECE9'}}}
+                        initialParams={{auth:auth}}
+                    />
 
-                <Stack.Screen
-                    name="Home"
-                    component={Draw}
-                    options={{headerShown:false}}
-                />
+                    <Stack.Screen
+                        name="Reset"
+                        component={ResetPasswordScreen}
+                        options={{headerBackTitle:'Cofnij', title: 'Cofnij', headerStyle:{backgroundColor:'#FEECE9'}}}
+                    />
+                </Stack.Navigator>
+            </NavigationContainer>
+        )
+    }else{
+        return (
+            <NavigationContainer>
+                <Stack.Navigator initialRouteName="Home">
 
-                <Stack.Screen
-                    name="Topic"
-                    component={TopicScreen}
-                    options={{headerShown:false}}
-                />
+                    <Stack.Screen
+                        name="Home"
+                        component={Draw}
+                        options={{headerShown:false}}
+                    />
 
-                <Stack.Screen
-                    name="Reset"
-                    component={ResetPasswordScreen}
-                    options={{headerBackTitle:'Cofnij', title: 'Cofnij', headerStyle:{backgroundColor:'#FEECE9'}}}
-                />
+                    <Stack.Screen
+                        name="Topic"
+                        component={TopicScreen}
+                        options={{headerShown:false}}
+                    />
 
-                <Stack.Screen 
-                    name="Exam"
-                    component={ExamScreen}
-                    options={{headerShown:false}}
-                />
+                    <Stack.Screen 
+                        name="Exam"
+                        component={ExamScreen}
+                        options={{headerShown:false}}
+                    />
 
-            </Stack.Navigator>
-        </NavigationContainer> 
-    );
+                </Stack.Navigator>
+            </NavigationContainer> 
+        );
+    }
 }
   

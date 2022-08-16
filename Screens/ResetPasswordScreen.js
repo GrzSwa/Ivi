@@ -50,7 +50,7 @@ export default function ResetPasswordScreen({navigation, route}) {
                         />
                     }
                 />
-                <TouchableOpacity onPress={() => {handleSubmit(onSubmit)}} style={styles.btn}>
+                <TouchableOpacity onPress={handleSubmit(onSubmit)} style={styles.btn}>
                     <Text>Resetuj Hasło</Text>
                 </TouchableOpacity>
             </View>

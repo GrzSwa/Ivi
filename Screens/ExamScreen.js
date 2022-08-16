@@ -21,6 +21,7 @@ export default function ExamScreen({navigation, route}) {
 	const [doneChangeText, setDoneChangeText] = useState(false)
 	const [result, setResult] = useState([]);
 	const [idExam, setIdExam] = useState(undefined);
+	const [checkIfAnyAnswerHasBeenGiven, setCheckIfAnyAnswerHasBeenGiven] = useState(false);
 
 	const getTimeFromExamTopBar = (time) =>{setTimeFromExamTopBar(time);}
 
@@ -95,6 +96,7 @@ export default function ExamScreen({navigation, route}) {
 	}
 
 	const addAnswer = (id, value) =>{
+		setCheckIfAnyAnswerHasBeenGiven(true);
 		let oldArr = [...answer];
 		let flag = false;
 		if(!oldArr.length)
@@ -153,7 +155,7 @@ export default function ExamScreen({navigation, route}) {
 		update(up0,{NajlepszyCzas: write.NajlepszyCzas, NajlepszyTemat: write.NajlepszyTemat})
 		update(up1,
 			{
-				wynik:Math.ceil(data.correct/data.allQuestions * 100), 
+				wynik:write.PostepTematow[0].wynik, 
 				IloscProb: write.PostepTematow[0].IloscProb, 
 				Bledy: write.PostepTematow[0].Bledy,
 				OstatniaProba: write.PostepTematow[0].OstatniaProba 
@@ -162,61 +164,60 @@ export default function ExamScreen({navigation, route}) {
 	}
 
 	const checkAnswer = () =>{
-		let mistake = [];
-		let trueFalseCorrect = 0;
-		let trueFalseCount = 0;
-		let choiceCorrect = 0;
-		let choiceCount = 0;
-		let readingCorrect = 0;
-		let readingCount = 0;
-		for(let i of answer){
-			if(questions[i.idQuestions].category == 'reading')
-				{
-					readingCount++;
-					i.answer == questions[i.idQuestions].questions 
-						? readingCorrect++
-						: mistake.push({questions:questions[i.idQuestions].questions, urAnswer: i.answer})
-				}
-			else if(questions[i.idQuestions].category == 'choice')
-				{
-					choiceCount++;
-					i.answer == questions[i.idQuestions].correctAnswer
-						? choiceCorrect++
-						: mistake.push({questions:questions[i.idQuestions].questions, correctAnswer:questions[i.idQuestions].correctAnswer, urAnswer: i.answer})
-				}
-			else
-				{
-					trueFalseCount++;
-					let tmp = '';
-					i.answer.toLowerCase() == 'tak' ? tmp = true : tmp = false
-					tmp == questions[i.idQuestions].correctAnswer
-						? trueFalseCorrect++
-						: mistake.push({questions:questions[i.idQuestions].questions, correctAnswer:questions[i.idQuestions].correctAnswer, urAnswer: tmp})
-				}
-		}
-		mistake.push(
-			{
-				allQueTrueFalse: trueFalseCount,
-				allQueChoice: choiceCount,
-				allQueReading: readingCount,
-				trueFalseCorrect: trueFalseCorrect,
-				choiceCorrect: choiceCorrect,
-				readingCorrect: readingCorrect,
-				allIsCorrect: trueFalseCount == trueFalseCorrect && choiceCount == choiceCorrect && readingCount == readingCorrect ? true : false
-			}		
-		);
-		
-		
-		setResult(mistake);
-		updateExamStatistic(
-			{
-				user:route.params.user,
-				time:TimeFromExamTopBar,
-				exam: idExam,
-				allQuestions: trueFalseCount+choiceCount+readingCount, 
-				correct:trueFalseCorrect+choiceCorrect+readingCorrect,
+			let mistake = [];
+			let trueFalseCorrect = 0;
+			let trueFalseCount = 0;
+			let choiceCorrect = 0;
+			let choiceCount = 0;
+			let readingCorrect = 0;
+			let readingCount = 0;
+			for(let i of answer){
+				if(questions[i.idQuestions].category == 'reading')
+					{
+						readingCount++;
+						i.answer == questions[i.idQuestions].questions 
+							? readingCorrect++
+							: mistake.push({questions:questions[i.idQuestions].questions, urAnswer: i.answer})
+					}
+				else if(questions[i.idQuestions].category == 'choice')
+					{
+						choiceCount++;
+						i.answer == questions[i.idQuestions].correctAnswer
+							? choiceCorrect++
+							: mistake.push({questions:questions[i.idQuestions].questions, correctAnswer:questions[i.idQuestions].correctAnswer, urAnswer: i.answer})
+					}
+				else
+					{
+						trueFalseCount++;
+						let tmp = '';
+						i.answer.toLowerCase() == 'tak' ? tmp = true : tmp = false
+						tmp == questions[i.idQuestions].correctAnswer
+							? trueFalseCorrect++
+							: mistake.push({questions:questions[i.idQuestions].questions, correctAnswer:questions[i.idQuestions].correctAnswer, urAnswer: tmp})
+					}
 			}
-		)
+			mistake.push(
+				{
+					allQueTrueFalse: trueFalseCount,
+					allQueChoice: choiceCount,
+					allQueReading: readingCount,
+					trueFalseCorrect: trueFalseCorrect,
+					choiceCorrect: choiceCorrect,
+					readingCorrect: readingCorrect,
+					allIsCorrect: trueFalseCount == trueFalseCorrect && choiceCount == choiceCorrect && readingCount == readingCorrect ? true : false
+				}		
+			);
+			setResult(mistake);
+			if(checkIfAnyAnswerHasBeenGiven)
+				updateExamStatistic(
+					{
+						user:route.params.user,
+						time:TimeFromExamTopBar,
+						exam: idExam,
+						allQuestions: trueFalseCount+choiceCount+readingCount, 
+						correct:trueFalseCorrect+choiceCorrect+readingCorrect,
+					}
+				)
 	}
 
 	const renderAnswerBox = (idQuestions) =>{
@@ -224,7 +225,7 @@ export default function ExamScreen({navigation, route}) {
 			if(!result.length){
 				setTimeout(()=>{checkAnswer()},3000)
 				return(<Loading />)
-			}else if(!result[result.length-1].allIsCorrect){
+			}else if(!checkIfAnyAnswerHasBeenGiven){
 				console.log(result)
 				return(
 					<View style={[styles.BoxContainer,{justifyContent:'center'}]}>

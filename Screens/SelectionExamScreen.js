@@ -6,11 +6,14 @@ import { getAuth } from 'firebase/auth';
 import { Loading } from '../components/Loading';
 import { Beginning, Tried, Completed } from '../components/ExamStatus';
 
-export default function SelectionExamScreen({navigation}) {
+export default function SelectionExamScreen({navigation, route}) {
 	
   function getExam(){
 		const readData = ref(db,'/Konta');
 			onValue(readData, (snapshot)=>{
+				if(auth.currentUser == null)
+					return setLoading(true)
+				else{
 				var arr = [];
 				var idU = 0;
 				var exam = snapshot.val();
@@ -31,18 +34,18 @@ export default function SelectionExamScreen({navigation}) {
 				}
 				setData(arr);
 				setLoading(false)
-			})    
+			}})    
 	}
 
 	useEffect(()=>{
-		getExam();
+		setTimeout(()=>getExam(),1500)
 	},[])
 
 	const [data, setData] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [idUser, setIdUser] = useState(undefined);
 	const auth = getAuth();
-  
+
 	const renderItem = ({ item }) => {
         if(item.atempt == 0 ){
             return (
