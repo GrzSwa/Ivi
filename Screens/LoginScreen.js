@@ -1,14 +1,35 @@
 import {useEffect, useState} from 'react';
 import { useForm, Controller } from "react-hook-form";
 import { StyleSheet, Text, View, SafeAreaView, Platform, TextInput, Alert, TouchableOpacity, StatusBar, Image} from 'react-native';
-import { signInWithEmailAndPassword} from 'firebase/auth';
+import { signInWithEmailAndPassword, getAuth, GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
 import { getDownloadURL, getStorage, ref } from "firebase/storage";
+import * as WebBrowser from 'expo-web-browser';
+import { ResponseType } from 'expo-auth-session';
+import * as Google from 'expo-auth-session/providers/google';
 
 const SB_HEIGHT = StatusBar.currentHeight;
+
+WebBrowser.maybeCompleteAuthSession();
 
 export default function LoginScreen({navigation, route}) {
     const { control, handleSubmit } = useForm();
     const [icon, setIcon] = useState(undefined);
+
+    const [request, response, promptAsync] = Google.useIdTokenAuthRequest(
+        {
+          clientId: '617087916984-2i5sc1hjcunp2ngu4iirfs5khtk0m9ds.apps.googleusercontent.com',
+        },
+    );
+
+    useEffect(()=>{
+        if (response?.type === 'success') {
+            const { id_token } = response.params;
+            const credential = GoogleAuthProvider.credential(id_token);
+            console.log(credential)
+            //signInWithCredential(route.params.auth, credential).then((res)=>console.log(res.user));
+        }
+    },[response])
+    
 
     useEffect(() => {
         const getImage = async () =>{
@@ -20,6 +41,7 @@ export default function LoginScreen({navigation, route}) {
         }
         getImage()
     },[])
+
 
     const onSubmit = (data) =>{
         {signInWithEmailAndPassword(route.params.auth, data.Login, data.password).then((cred) => {
@@ -85,6 +107,13 @@ export default function LoginScreen({navigation, route}) {
 
                     <TouchableOpacity onPress={handleSubmit(onSubmit)} style={styles.btn}>
                         <Text>Zaloguj</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity 
+                        disabled={!request}
+                        onPress={()=>{promptAsync()}} 
+                        style={styles.btn}>
+                        <Text>Zaloguj się za pomocą Google</Text>
                     </TouchableOpacity>
                     
                 </View>

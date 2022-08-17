@@ -53,7 +53,7 @@ export default function HomeScreen({navigation, route}) {
 		<TouchableOpacity key={item.key}onPress={()=>{navigation.navigate("Topic",{data:item, db:ref(db,'/Konta/'+idUser+'/PostepTematow/'+idTopic.indexOf(item.key))})}}>
 			<View style={styles.listStyleContainer}>
 				<View style={styles.picture}>
-					<Text>IMG</Text>
+					<Text style={{color:'white',fontSize:22}}>{item.key.replace("Pisownia","")}</Text>
 				</View>
 				<View style={styles.rightContent}>
 					<View style={styles.title}>
