@@ -4,9 +4,9 @@ import { StyleSheet, Text, View, SafeAreaView, Platform, TextInput, Alert, Touch
 import { signInWithEmailAndPassword, getAuth, GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
 import { getDownloadURL, getStorage, ref } from "firebase/storage";
 import * as WebBrowser from 'expo-web-browser';
-import { ResponseType } from 'expo-auth-session';
 import * as Google from 'expo-auth-session/providers/google';
-
+import { newUser } from '../database/newUser';
+import { getInfo } from '../database/getInfo';
 const SB_HEIGHT = StatusBar.currentHeight;
 
 WebBrowser.maybeCompleteAuthSession();
@@ -21,12 +21,17 @@ export default function LoginScreen({navigation, route}) {
         },
     );
 
-    useEffect(()=>{
+   useEffect(()=>{
         if (response?.type === 'success') {
             const { id_token } = response.params;
             const credential = GoogleAuthProvider.credential(id_token);
-            console.log(credential)
-            //signInWithCredential(route.params.auth, credential).then((res)=>console.log(res.user));
+            signInWithCredential(route.params.auth, credential)
+                .then((res)=>{
+                    !getInfo(res.user.email) ? newUser(res.user.email) : null
+                }
+            ).catch((error) => {
+                Alert.alert("Coś poszło nie tak",error.message[{ text: "OK" }]);
+            });
         }
     },[response])
     
@@ -41,6 +46,8 @@ export default function LoginScreen({navigation, route}) {
         }
         getImage()
     },[])
+
+    
 
 
     const onSubmit = (data) =>{
@@ -114,6 +121,7 @@ export default function LoginScreen({navigation, route}) {
                         onPress={()=>{promptAsync()}} 
                         style={styles.btn}>
                         <Text>Zaloguj się za pomocą Google</Text>
+                        <Image source={require('../assets/btn_google_signin_light_normal_web.png')}/>
                     </TouchableOpacity>
                     
                 </View>
