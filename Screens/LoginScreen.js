@@ -1,12 +1,14 @@
 import {useEffect, useState} from 'react';
 import { useForm, Controller } from "react-hook-form";
 import { StyleSheet, Text, View, SafeAreaView, Platform, TextInput, Alert, TouchableOpacity, StatusBar, Image} from 'react-native';
-import { signInWithEmailAndPassword, getAuth, GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
+import { signInWithEmailAndPassword, getAuth, GoogleAuthProvider, signInWithCredential, getAdditionalUserInfo } from 'firebase/auth';
 import { getDownloadURL, getStorage, ref } from "firebase/storage";
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import { newUser } from '../database/newUser';
 import { getInfo } from '../database/getInfo';
+import { GoogleSocialButton } from "react-native-social-buttons";
+import Hr from '../components/Hr';
 const SB_HEIGHT = StatusBar.currentHeight;
 
 WebBrowser.maybeCompleteAuthSession();
@@ -27,7 +29,7 @@ export default function LoginScreen({navigation, route}) {
             const credential = GoogleAuthProvider.credential(id_token);
             signInWithCredential(route.params.auth, credential)
                 .then((res)=>{
-                    !getInfo(res.user.email) ? newUser(res.user.email) : null
+                    getAdditionalUserInfo(res).isNewUser ? newUser(res.user.email) : null //Nie działa od razu
                 }
             ).catch((error) => {
                 Alert.alert("Coś poszło nie tak",error.message[{ text: "OK" }]);
@@ -115,13 +117,18 @@ export default function LoginScreen({navigation, route}) {
                     <TouchableOpacity onPress={handleSubmit(onSubmit)} style={styles.btn}>
                         <Text>Zaloguj</Text>
                     </TouchableOpacity>
-
+                    <Hr 
+                        label={'Lub zaloguj się przez:'}
+                        color={'#6c757d'}
+                        colorLine={'#6c757d'}
+                        fontSize={11}
+                        height={0.5}
+                    />
                     <TouchableOpacity 
                         disabled={!request}
-                        onPress={()=>{promptAsync()}} 
-                        style={styles.btn}>
-                        <Text>Zaloguj się za pomocą Google</Text>
-                        <Image source={require('../assets/btn_google_signin_light_normal_web.png')}/>
+                        //onPress={} 
+                        style={styles.otherSignIn}>
+                        <GoogleSocialButton buttonText={'Zaloguj się przez Google'} onPress={()=>{promptAsync()}}/>
                     </TouchableOpacity>
                     
                 </View>
@@ -186,7 +193,8 @@ const styles = StyleSheet.create({
         color:'white',
         padding: 10,
         borderRadius: 30,
-        marginTop:20
+        marginTop:10,
+        marginBottom:10
     },
 
     actionBtn:{
@@ -195,4 +203,8 @@ const styles = StyleSheet.create({
         color:'#2F3A8F',
         paddingBottom: 10,
     },
+
+    otherSignIn:{
+        marginTop:10,
+    }
   });
