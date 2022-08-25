@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, FlatList, TouchableOpacity } from 'react-native';
+import { Text, View, SafeAreaView, FlatList, TouchableOpacity } from 'react-native';
+import { SelectionTopicScreenStyle } from '../Style';
 import { Loading } from '../components/Loading';
 import { db } from '../FirebaseConfig';
 import { ref, onValue } from "firebase/database";
@@ -51,18 +52,18 @@ export default function HomeScreen({navigation, route}) {
 	const renderItem = ({ item }) =>(
 
 		<TouchableOpacity key={item.key}onPress={()=>{navigation.navigate("Topic",{data:item, db:ref(db,'/Konta/'+idUser+'/PostepTematow/'+idTopic.indexOf(item.key))})}}>
-			<View style={styles.listStyleContainer}>
-				<View style={styles.picture}>
+			<View style={SelectionTopicScreenStyle.listStyleContainer}>
+				<View style={SelectionTopicScreenStyle.picture}>
 					<Text style={{color:'white',fontSize:22}}>{item.key.replace("Pisownia","")}</Text>
 				</View>
-				<View style={styles.rightContent}>
-					<View style={styles.title}>
+				<View style={SelectionTopicScreenStyle.rightContent}>
+					<View style={SelectionTopicScreenStyle.title}>
 						<Text style={{fontWeight: 'bold', fontSize:14}}>{item.desc.Tytul}</Text>
 					</View>
-					<View style={styles.descriptions}>  
+					<View style={SelectionTopicScreenStyle.descriptions}>  
 						<Text style={{fontSize:12}}>{item.desc.Opis}</Text>
 					</View>
-					<View style={styles.progress}>
+					<View style={SelectionTopicScreenStyle.progress}>
 						<ProgressBar 
 							width={120}
 							height={10}
@@ -79,8 +80,8 @@ export default function HomeScreen({navigation, route}) {
 	);
 if(!loading){
 	return (
-		<SafeAreaView style={styles.container}>
-			<View style={styles.listSpace}>
+		<SafeAreaView style={SelectionTopicScreenStyle.container}>
+			<View style={SelectionTopicScreenStyle.listSpace}>
 				<FlatList 
 					style={{width:'100%'}}
 					data={data}
@@ -97,7 +98,7 @@ if(!loading){
 }
 }
 
-const styles = StyleSheet.create({
+/*const Styles = StyleSheet.create({
   container: {
 	flex: 1,
 	alignItems: 'center',
@@ -150,4 +151,4 @@ const styles = StyleSheet.create({
 	paddingTop:5,
 	alignItems:'center'
   },
-});
+});*/

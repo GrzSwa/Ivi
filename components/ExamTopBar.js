@@ -1,8 +1,8 @@
-import {Text, View, StatusBar, StyleSheet, Dimensions, Button} from 'react-native';
+import {Text, View } from 'react-native';
+import { ExamTopBarStyle } from '../Style';
 import { Ionicons } from '@expo/vector-icons';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useState, useRef, useEffect, useImperativeHandle, forwardRef } from 'react';
-const SB_HEIGHT = StatusBar.currentHeight;
+
 
 const ExamTopBar = ({title, onPress, sendTimeToParent},ref) => {
     const [time, setTime] = useState(0);
@@ -25,19 +25,19 @@ const ExamTopBar = ({title, onPress, sendTimeToParent},ref) => {
     }, [running]);
 
     const showMinute = () => (
-        <Text style={styles.timerStyle}>
+        <Text style={ExamTopBarStyle.timerStyle}>
             {Math.floor((time/60000) % 60) < 10 ? "0" + Math.floor((time/60000) % 60) : Math.floor((time/60000) % 60)}
         </Text>
     );
 
     const showSecond = () => (
-        <Text style={styles.timerStyle}>
+        <Text style={ExamTopBarStyle.timerStyle}>
             {Math.floor((time/1000) % 60) < 10 ? "0" + Math.floor((time/1000) % 60) : Math.floor((time/1000) % 60)}
         </Text>
     );
 
     const showMiliseconds = () => (
-        <Text style={styles.timerStyle}>
+        <Text style={ExamTopBarStyle.timerStyle}>
             {Math.floor((time/10) % 100) < 10 ? "0" + Math.floor((time/10) % 100) : Math.floor((time/10) % 100)}
         </Text>
     );
@@ -63,9 +63,9 @@ const ExamTopBar = ({title, onPress, sendTimeToParent},ref) => {
     }
 
     return( 
-        <View style={styles.container}>
-            <View style={styles.firstRow}>
-                <View style={styles.stopwatch}>
+        <View style={ExamTopBarStyle.container}>
+            <View style={ExamTopBarStyle.firstRow}>
+                <View style={ExamTopBarStyle.stopwatch}>
                     <Ionicons name='time' size={30} color={"#000"}/>
                     {Show()}
                 </View>
@@ -79,7 +79,7 @@ const ExamTopBar = ({title, onPress, sendTimeToParent},ref) => {
 
 export default forwardRef(ExamTopBar)
 
-const styles = StyleSheet.create({
+/*const Styles = StyleSheet.create({
     container: {
         backgroundColor:'#FE7E6D',
         paddingTop: Platform.OS == 'android' ? SB_HEIGHT : 0,
@@ -105,4 +105,4 @@ const styles = StyleSheet.create({
         zIndex:1,
         flexDirection:'row'
     }
-})
+})*/

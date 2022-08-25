@@ -1,7 +1,7 @@
 import { db } from '../FirebaseConfig';
 import { ref, set, onValue } from "firebase/database";
 
-function getAmountUser(){
+export function getAmountUser(){
     const readData = ref(db,'/')
     var amount = undefined;
     var arr = [];
@@ -29,11 +29,10 @@ function writeUserData(userNumber,email,topicImprove) {
         NajlepszyTemat : "-",
         Strike: 0,
         PostepTematow: topicImprove
-    });
+    })
 }
 
 export function newUser(email){
     const result = getAmountUser();
     writeUserData(result.newUserDatabaseSpace,email,result.topicImprove);
-    console.log("chyba się udało");
 }

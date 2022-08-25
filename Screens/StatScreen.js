@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, Button } from 'react-native';
+import { Text, View, SafeAreaView} from 'react-native';
+import { StatScreenStyle } from '../Style';
 import { Loading } from '../components/Loading';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import { db } from '../FirebaseConfig';
@@ -80,8 +81,8 @@ export default function StatScreen({navigation,route}) {
 if(!loading)
     return (
         <ScrollView>
-            <SafeAreaView style={styles.container}>    
-                <View style={styles.progress}>
+            <SafeAreaView style={StatScreenStyle.container}>    
+                <View style={StatScreenStyle.progress}>
                     <CircularProgress //https://www.npmjs.com/package/react-native-circular-progress-indicator
                         radius={100}
                         value={progress}
@@ -98,51 +99,51 @@ if(!loading)
                     <Text style={{marginTop:10, color:'#2F3A8F', fontWeight:'bold', fontSize:14}}>Rozwiązane testy</Text>
                 </View>
 
-                <View style={styles.bestStat}>
-                    <View style={styles.bestStatView}>
-                        <Text style={[styles.txt,{fontSize:35}]}>{stat[0].strike}</Text>
-                        <Text style={[styles.txt,{fontSize:12}]} >Rozwiązanych zadań z rzędu</Text>
+                <View style={StatScreenStyle.bestStat}>
+                    <View style={StatScreenStyle.bestStatView}>
+                        <Text style={[StatScreenStyle.txt,{fontSize:35}]}>{stat[0].strike}</Text>
+                        <Text style={[StatScreenStyle.txt,{fontSize:12}]} >Rozwiązanych zadań z rzędu</Text>
                     </View>
 
-                    <View style={styles.bestStatView}>
-                        <Text style={[styles.txt,{fontSize:15, marginTop:15, marginBottom:10}]}>{stat[0].time}</Text>
-                        <Text style={[styles.txt,{fontSize:12}]} >Najszybciej rozwiązany test</Text>
+                    <View style={StatScreenStyle.bestStatView}>
+                        <Text style={[StatScreenStyle.txt,{fontSize:15, marginTop:15, marginBottom:10}]}>{stat[0].time}</Text>
+                        <Text style={[StatScreenStyle.txt,{fontSize:12}]} >Najszybciej rozwiązany test</Text>
                     </View>
 
-                    <View style={styles.bestStatView}>
-                        <Text style={[styles.txt,{fontSize:35}]}>{stat[0].topic}</Text>
-                        <Text style={[styles.txt,{fontSize:12}]}>Najlepszy twój test</Text>
+                    <View style={StatScreenStyle.bestStatView}>
+                        <Text style={[StatScreenStyle.txt,{fontSize:35}]}>{stat[0].topic}</Text>
+                        <Text style={[StatScreenStyle.txt,{fontSize:12}]}>Najlepszy twój test</Text>
                     </View>
                 </View>
 
-                <View style={styles.otherStat}>
-                    <View style={styles.otherStatView}>
-                        <View style={styles.otherStatViewLeft}>
-                            <Text style={[styles.txt,{fontSize:18}]} >{stat[0].avg/amount}%</Text>
+                <View style={StatScreenStyle.otherStat}>
+                    <View style={StatScreenStyle.otherStatView}>
+                        <View style={StatScreenStyle.otherStatViewLeft}>
+                            <Text style={[StatScreenStyle.txt,{fontSize:18}]} >{stat[0].avg/amount}%</Text>
                         </View>
 
-                        <View style={styles.otherStatViewRight}>
-                            <Text style={[styles.txt,{fontSize:14, color:'#000'}]}>Twój średni wynik</Text>
+                        <View style={StatScreenStyle.otherStatViewRight}>
+                            <Text style={[StatScreenStyle.txt,{fontSize:14, color:'#000'}]}>Twój średni wynik</Text>
                         </View>
                     </View>
 
-                    <View style={styles.otherStatView}>
-                            <View style={styles.otherStatViewLeft}>
-                                <Text style={styles.txt} >{stat[0].atempt}</Text>
+                    <View style={StatScreenStyle.otherStatView}>
+                            <View style={StatScreenStyle.otherStatViewLeft}>
+                                <Text style={StatScreenStyle.txt} >{stat[0].atempt}</Text>
                             </View>
 
-                            <View style={styles.otherStatViewRight}>
-                                <Text style={[styles.txt,{fontSize:14, color:'#000'}]} >Najwięcej powtórzonych testów z: "{stat[0].repetitions}"</Text>
+                            <View style={StatScreenStyle.otherStatViewRight}>
+                                <Text style={[StatScreenStyle.txt,{fontSize:14, color:'#000'}]} >Najwięcej powtórzonych testów z: "{stat[0].repetitions}"</Text>
                             </View>
                         </View>
 
-                    <View style={styles.otherStatView}>
-                            <View style={styles.otherStatViewLeft}>
-                                <Text style={styles.txt}  >{stat[0].mistake}</Text>
+                    <View style={StatScreenStyle.otherStatView}>
+                            <View style={StatScreenStyle.otherStatViewLeft}>
+                                <Text style={StatScreenStyle.txt}  >{stat[0].mistake}</Text>
                             </View>
 
-                            <View style={styles.otherStatViewRight}>
-                                <Text style={[styles.txt,{fontSize:14, color:'#000'}]} >Najwięcej błędów w jednym teście</Text>
+                            <View style={StatScreenStyle.otherStatViewRight}>
+                                <Text style={[StatScreenStyle.txt,{fontSize:14, color:'#000'}]} >Najwięcej błędów w jednym teście</Text>
                             </View>
                         </View>
                 </View>
@@ -155,7 +156,7 @@ else
     );
 }
 
-const styles = StyleSheet.create({
+/*const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
@@ -222,4 +223,4 @@ const styles = StyleSheet.create({
         fontWeight:'bold'
     }
 
-});
+});*/

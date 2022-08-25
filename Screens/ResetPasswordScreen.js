@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View, TextInput, Button, Alert, TouchableOpacity } from 'react-native';
+import React from "react";
+import { Text, View, TextInput, Alert, TouchableOpacity } from 'react-native';
+import { ResetPasswordScreenStyle } from "../Style";
 import { useForm, Controller } from "react-hook-form";
 import { sendPasswordResetEmail } from 'firebase/auth';
 
@@ -7,10 +8,8 @@ export default function ResetPasswordScreen({navigation, route}) {
 
     const { control, handleSubmit} = useForm();
 
-    function confirm (data){
-        console.log(route.params.auth)
-        {sendPasswordResetEmail(route.params.auth,data.email)}
-    }
+    const confirm = (data) => sendPasswordResetEmail(route.params.auth,data.email);
+    
     const onSubmit = (data) =>{
         Alert.alert("Na pewno?","Jesteś pewny, że chcesz zresetować hasło dla podanego adresu e-mail?",[
             {text: "Tak", onPress : confirm(data)},
@@ -19,15 +18,15 @@ export default function ResetPasswordScreen({navigation, route}) {
         );
     } 
     return (
-        <View style={styles.container}>
-            <View style={styles.FormBox}>
+        <View style={ResetPasswordScreenStyle.container}>
+            <View style={ResetPasswordScreenStyle.FormBox}>
                 <Controller
                     control={control}
                     name="email"
                     rules={{require:true}}
                     render={({field: {value, onChange}}) => 
                         <TextInput 
-                            style={styles.input}
+                            style={ResetPasswordScreenStyle.input}
                             placeholder='Adres e-mail'
                             value={value}
                             onChangeText={onChange}
@@ -42,7 +41,7 @@ export default function ResetPasswordScreen({navigation, route}) {
                     rules={{require:true}}
                     render={({field: {value, onChange}}) => 
                         <TextInput 
-                            style={styles.input}
+                            style={ResetPasswordScreenStyle.input}
                             placeholder='Potwierdź adres e-mail'
                             value={value}
                             onChangeText={onChange}
@@ -50,7 +49,7 @@ export default function ResetPasswordScreen({navigation, route}) {
                         />
                     }
                 />
-                <TouchableOpacity onPress={handleSubmit(onSubmit)} style={styles.btn}>
+                <TouchableOpacity onPress={handleSubmit(onSubmit)} style={ResetPasswordScreenStyle.btn}>
                     <Text>Resetuj Hasło</Text>
                 </TouchableOpacity>
             </View>
@@ -58,7 +57,7 @@ export default function ResetPasswordScreen({navigation, route}) {
     );
 }
 
-const styles = StyleSheet.create({
+/*const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#feece9',
@@ -95,4 +94,4 @@ btn:{
     borderRadius: 30,
     marginTop:20
 },
-});
+});*/

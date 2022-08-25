@@ -1,13 +1,12 @@
-import {Text, View, StatusBar, StyleSheet, Dimensions} from 'react-native';
+import {Text, View } from 'react-native';
+import { TopicTopBarStyle } from '../Style';
 import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Shadow } from 'react-native-shadow-2';
 
-const SB_HEIGHT = StatusBar.currentHeight;
 
 export const TopicTopBar = ({title, onPress}) => (
-    <View style={styles.container}>
-        <View style={styles.firstRow}>
+    <View style={TopicTopBarStyle.container}>
+        <View style={TopicTopBarStyle.firstRow}>
             <View style={{position:'absolute', marginLeft:10, zIndex:1}}>
                 <TouchableOpacity onPress={onPress}>
                     <Ionicons name='arrow-back-circle' size={30} color={"#000"}/>
@@ -21,7 +20,7 @@ export const TopicTopBar = ({title, onPress}) => (
     
 );
 
-const styles = StyleSheet.create({
+/*const Styles = StyleSheet.create({
     container: {
         backgroundColor:'#FE7E6D',
         paddingTop: Platform.OS == 'android' ? SB_HEIGHT : 0,
@@ -38,4 +37,4 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         position:'relative'
     }
-})
+})*/

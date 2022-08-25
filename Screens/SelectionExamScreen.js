@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, FlatList} from 'react-native';
+import { View, SafeAreaView, FlatList} from 'react-native';
+import { SelectionExamScreenStyle } from '../Style';
 import { db } from '../FirebaseConfig';
 import { ref, onValue } from "firebase/database";
 import { getAuth } from 'firebase/auth';
@@ -51,7 +52,7 @@ export default function SelectionExamScreen({navigation, route}) {
             return (
                 <Beginning
                     item={item}
-                    style={styles.examListStyleContainer}
+                    style={SelectionExamScreenStyle.examListStyleContainer}
                     onPress={()=>{navigation.navigate("Exam",{id:item.key, user:idUser})}}
                 />
             );
@@ -59,7 +60,7 @@ export default function SelectionExamScreen({navigation, route}) {
             return (
                 <Tried
                     item={item}
-                    style={styles.examListStyleContainer}
+                    style={SelectionExamScreenStyle.examListStyleContainer}
                     onPress={()=>{navigation.navigate("Exam",{id:item.key, user:idUser})}}
                 />
             );
@@ -67,7 +68,7 @@ export default function SelectionExamScreen({navigation, route}) {
             return (
                 <Completed
                     item={item}
-                    style={styles.examListStyleContainer}
+                    style={SelectionExamScreenStyle.examListStyleContainer}
                     onPress={()=>{console.log("Jeszcze raz?")}}
                 />
             ); 
@@ -75,8 +76,8 @@ export default function SelectionExamScreen({navigation, route}) {
 	};
 	if(!loading)
 		return (
-			<SafeAreaView style={styles.container}>
-				<View style={styles.listSpace}>
+			<SafeAreaView style={SelectionExamScreenStyle.container}>
+				<View style={SelectionExamScreenStyle.listSpace}>
 					<FlatList 
 						style={{width:'100%'}}
 						data={data}
@@ -92,7 +93,7 @@ export default function SelectionExamScreen({navigation, route}) {
 		);
 }
 
-const styles = StyleSheet.create({
+/*const styles = StyleSheet.create({
     container: {
       flex: 1,
       alignItems: 'center',
@@ -115,4 +116,4 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       width:'90%',
     },
-});
+});*/

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, View, SafeAreaView, Dimensions, TouchableOpacity} from 'react-native';
+import { View, SafeAreaView, Dimensions, TouchableOpacity} from 'react-native';
+import { TopicScreenStyle } from '../Style';
 import { LessonBox } from '../components/LessonBox';
 import { TopicTopBar } from '../components/TopicTopBar';
 import { ProgressBar } from '../components/ProgressBar';
@@ -37,7 +38,7 @@ export default function TopicScreen({navigation, route}) {
 		}			
 	}
 		return (
-			<SafeAreaView style={styles.container}>
+			<SafeAreaView style={TopicScreenStyle.container}>
 				<TopicTopBar title={route.params.data.key} onPress={()=>{navigation.goBack()}}/>
 				<View style={{marginTop:-46}}>
 					<ProgressBar 
@@ -62,7 +63,7 @@ export default function TopicScreen({navigation, route}) {
 					/>
 				</View>
 
-				<View style={styles.actionBtn}>
+				<View style={TopicScreenStyle.actionBtn}>
 					<TouchableOpacity onPress={undo}>
 						<Ionicons name='ios-arrow-undo-circle-sharp' size={60} color={"#2F3A8F"}/>
 					</TouchableOpacity>
@@ -76,7 +77,7 @@ export default function TopicScreen({navigation, route}) {
 		);
 }
 
-const styles = StyleSheet.create({
+/*const Styles = StyleSheet.create({
     container: {
       flex: 1,
       alignItems: 'center',
@@ -91,4 +92,4 @@ const styles = StyleSheet.create({
 		justifyContent:'space-evenly',
 		alignItems:'center'
 	}
-  });
+  });*/

@@ -1,19 +1,19 @@
-import { View,Text, TouchableOpacity, Platform, StyleSheet, StatusBar } from 'react-native';
+import { View,Text, TouchableOpacity} from 'react-native';
+import { TopBarStyle } from '../Style';
 import { Ionicons } from '@expo/vector-icons';
 import { CustomText } from './CustomText';
 
-const SB_HEIGHT = StatusBar.currentHeight;
 
 export default function TopBar({ state, descriptors, navigation }){
     return (
-        <View style={styles.container}>
-            <View style={styles.firstRow}>
+        <View style={TopBarStyle.container}>
+            <View style={TopBarStyle.firstRow}>
                 <Text>Zażółć gęślą jaźń</Text>
                 <TouchableOpacity onPress={()=>{navigation.openDrawer()}}>
 					<Ionicons name='menu' size={30} color={"#000"}/>
                 </TouchableOpacity>
             </View>
-            <View style={styles.btnBackground}>
+            <View style={TopBarStyle.btnBackground}>
             {state.routes.map((route, index) => {
                 const { options } = descriptors[route.key];
                 const label =  options.title !== undefined ? options.title : route.name;
@@ -48,7 +48,7 @@ export default function TopBar({ state, descriptors, navigation }){
                     onPress={onPress}
                     onLongPress={onLongPress}
                   >
-                    <CustomText title={label} underlineStyle={[isFocused ? styles.btnUnderline : styles.btn]}/>
+                    <CustomText title={label} underlineStyle={[isFocused ? TopBarStyle.btnUnderline : TopBarStyle.btn]}/>
 
                   </TouchableOpacity>
                 );
@@ -58,7 +58,7 @@ export default function TopBar({ state, descriptors, navigation }){
     );
 }
 
-const styles = StyleSheet.create({
+/*const Styles = StyleSheet.create({
   container: {
     backgroundColor:'#FE7E6D',
     paddingTop: Platform.OS == 'android' ? SB_HEIGHT : 0,
@@ -100,4 +100,4 @@ const styles = StyleSheet.create({
 	borderRadius:50,
 	marginTop:2
   }
-});
+});*/

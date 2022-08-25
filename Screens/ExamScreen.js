@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, TextInput, FlatList, BackHandler, Alert} from 'react-native';
+import { Text, View, SafeAreaView, TextInput, FlatList, BackHandler, Alert} from 'react-native';
+import { ExamScreenStyle } from '../Style';
 import { Button, ButtonGroup } from '../components/Button';
 import { Loading } from '../components/Loading';
 import { Ionicons } from '@expo/vector-icons';
@@ -228,7 +229,7 @@ export default function ExamScreen({navigation, route}) {
 			}else if(!checkIfAnyAnswerHasBeenGiven){
 				console.log(result)
 				return(
-					<View style={[styles.BoxContainer,{justifyContent:'center'}]}>
+					<View style={[ExamScreenStyle.BoxContainer,{justifyContent:'center'}]}>
 						<Text>Nie udzielono odpowiedzi na żadne pytanie :/ </Text>
 					</View>
 				)
@@ -236,8 +237,8 @@ export default function ExamScreen({navigation, route}) {
 				let allQuestions = result[result.length-1].allQueTrueFalse + result[result.length-1].allQueChoice + result[result.length-1].allQueReading;
 				let correct = result[result.length-1].trueFalseCorrect + result[result.length-1].choiceCorrect + result[result.length-1].readingCorrect;
 			return(
-				<View style={styles.BoxContainer}>
-					<View style={[styles.questionsBox, {alignItems:'center', justifyContent:'space-around' ,flexDirection:'row'}]}>
+				<View style={ExamScreenStyle.BoxContainer}>
+					<View style={[ExamScreenStyle.questionsBox, {alignItems:'center', justifyContent:'space-around' ,flexDirection:'row'}]}>
 						<View>
 							<Text>Pytania tak lub nie - {result[result.length-1].trueFalseCorrect+'/'+result[result.length-1].allQueTrueFalse}</Text>
 							<Text>Pytania wyboru - {result[result.length-1].choiceCorrect+'/'+result[result.length-1].allQueChoice}</Text>
@@ -259,7 +260,7 @@ export default function ExamScreen({navigation, route}) {
 							/>
 						</View>
 					</View>
-					<View style={[styles.answerBox,{alignItems:'flex-start', justifyContent:'flex-start'}]}>
+					<View style={[ExamScreenStyle.answerBox,{alignItems:'flex-start', justifyContent:'flex-start'}]}>
 						<FlatList 
 							data={result}
 							keyExtractor={(item)=>{item.index}}
@@ -267,17 +268,17 @@ export default function ExamScreen({navigation, route}) {
 								if(item.index != result.length - 1){
 									if(typeof item.item.correctAnswer === 'boolean'){
 										return(
-											<View style={styles.mistakeBoxContainer}>
-												<View style={styles.mistakeBoxQuestions}>
-													<Text style={styles.mistakeBoxQuestionsText}>Pytanie</Text>
-													<Text style={styles.mistakeBoxQuestionsText}>{item.item.questions}</Text>
+											<View style={ExamScreenStyle.mistakeBoxContainer}>
+												<View style={ExamScreenStyle.mistakeBoxQuestions}>
+													<Text style={ExamScreenStyle.mistakeBoxQuestionsText}>Pytanie</Text>
+													<Text style={ExamScreenStyle.mistakeBoxQuestionsText}>{item.item.questions}</Text>
 												</View>
-												<View style={styles.mistakeBoxAnswerContainer}>
-													<View style={styles.mistakeBoxCorrect}>
+												<View style={ExamScreenStyle.mistakeBoxAnswerContainer}>
+													<View style={ExamScreenStyle.mistakeBoxCorrect}>
 														<Text>Poprawna odpowiedź:</Text>
 														<Text>{item.item.correctAnswer === true ? 'Tak' : 'Nie'}</Text>
 													</View>
-													<View style={styles.mistakeBoxUrAnswer}>
+													<View style={ExamScreenStyle.mistakeBoxUrAnswer}>
 														<Text>Twoja odpowiedź:</Text>
 														<Text>{item.item.urAnswer === true ? 'Tak' : 'Nie'}</Text>
 													</View>
@@ -287,17 +288,17 @@ export default function ExamScreen({navigation, route}) {
 									}
 									if(typeof item.item.correctAnswer === 'string'){
 										return(
-											<View style={styles.mistakeBoxContainer}>
-												<View style={styles.mistakeBoxQuestions}>
-													<Text style={styles.mistakeBoxQuestionsText}>Pytanie</Text>
-													<Text style={styles.mistakeBoxQuestionsText}>{item.item.questions}</Text>
+											<View style={ExamScreenStyle.mistakeBoxContainer}>
+												<View style={ExamScreenStyle.mistakeBoxQuestions}>
+													<Text style={ExamScreenStyle.mistakeBoxQuestionsText}>Pytanie</Text>
+													<Text style={ExamScreenStyle.mistakeBoxQuestionsText}>{item.item.questions}</Text>
 												</View>
-												<View style={styles.mistakeBoxAnswerContainer}>
-													<View style={styles.mistakeBoxCorrect}>
+												<View style={ExamScreenStyle.mistakeBoxAnswerContainer}>
+													<View style={ExamScreenStyle.mistakeBoxCorrect}>
 														<Text>Poprawna odpowiedź:</Text>
 														<Text>{item.item.correctAnswer}</Text>
 													</View>
-													<View style={styles.mistakeBoxUrAnswer}>
+													<View style={ExamScreenStyle.mistakeBoxUrAnswer}>
 														<Text>Twoja odpowiedź:</Text>
 														<Text>{item.item.urAnswer != undefined ? item.item.urAnswer : 'Brak Odpowiedzi'}</Text>
 													</View>
@@ -307,12 +308,12 @@ export default function ExamScreen({navigation, route}) {
 									}
 									if(item.item.correctAnswer === undefined){
 										return(
-											<View style={styles.mistakeBoxContainer}>
-												<View style={styles.mistakeBoxQuestions}>
-													<Text style={styles.mistakeBoxQuestionsText}>Zdanie brzmiało:</Text>
-													<Text style={styles.mistakeBoxQuestionsText}>{item.item.questions}</Text>
+											<View style={ExamScreenStyle.mistakeBoxContainer}>
+												<View style={ExamScreenStyle.mistakeBoxQuestions}>
+													<Text style={ExamScreenStyle.mistakeBoxQuestionsText}>Zdanie brzmiało:</Text>
+													<Text style={ExamScreenStyle.mistakeBoxQuestionsText}>{item.item.questions}</Text>
 												</View>
-												<View style={styles.mistakeBoxUrAnswer}>
+												<View style={ExamScreenStyle.mistakeBoxUrAnswer}>
 													<Text>Twoja odpowiedź:</Text>
 													<Text>{item.item.urAnswer != undefined ? item.item.urAnswer : 'Brak Odpowiedzi'}</Text>
 												</View>
@@ -329,16 +330,16 @@ export default function ExamScreen({navigation, route}) {
 		}
 			if(questions[idQuestions]?.category == 'TrueFalse'){
 				return(
-					<View style={styles.BoxContainer}>
-						<View style={styles.questionsBox}>
+					<View style={ExamScreenStyle.BoxContainer}>
+						<View style={ExamScreenStyle.questionsBox}>
 							<Text>{questions[idQuestions]?.questions}</Text>
 						</View>
-						<View style={styles.answerBox}>
+						<View style={ExamScreenStyle.answerBox}>
 							<ButtonGroup 
-								buttonContainerStyle={styles.btnContainer}
-								fontStyle={styles.btnFont}
-								style={styles.btn}
-								styleFocused={styles.btnFocused}
+								buttonContainerStyle={ExamScreenStyle.btnContainer}
+								fontStyle={ExamScreenStyle.btnFont}
+								style={ExamScreenStyle.btn}
+								styleFocused={ExamScreenStyle.btnFocused}
 								buttonsLabel={["Tak","Nie"]}
 								index={idQuestions}
 								onPress={addAnswer}
@@ -349,8 +350,8 @@ export default function ExamScreen({navigation, route}) {
 			}
 			if(questions[idQuestions]?.category == 'reading'){
 				return(
-					<View style={styles.BoxContainer}>
-						<View style={styles.questionsBox}>
+					<View style={ExamScreenStyle.BoxContainer}>
+						<View style={ExamScreenStyle.questionsBox}>
 							<Text style={{marginBottom:10}}>Kliknij aby odsłuchać tekst i zapisz go poniżej</Text>
 							<Button title={<Ionicons name='megaphone-sharp' size={30} color={"#fff"}/>}
 								backgroundColor={'#2F3A8F'}
@@ -360,9 +361,9 @@ export default function ExamScreen({navigation, route}) {
 								onPress={()=>{speak(questions[idQuestions].questions)}}
 							/>
 						</View>
-						<View style={[styles.answerBox, {alignItems:'center', justifyContent:'flex-start', flexDirection:'column'}]}>
+						<View style={[ExamScreenStyle.answerBox, {alignItems:'center', justifyContent:'flex-start', flexDirection:'column'}]}>
 							<TextInput
-								style={styles.input}
+								style={ExamScreenStyle.input}
 								multiline
 								numberOfLines={4}
 								placeholder="Tutaj wpisz usłyszny tekst"
@@ -387,16 +388,16 @@ export default function ExamScreen({navigation, route}) {
 				let arr = []
 				questions[idQuestions]?.answer.map((item, index) =>{arr.push(item)})
 				return(
-					<View style={styles.BoxContainer}>
-						<View style={styles.questionsBox}>
+					<View style={ExamScreenStyle.BoxContainer}>
+						<View style={ExamScreenStyle.questionsBox}>
 							<Text>{questions[idQuestions]?.questions}</Text>
 						</View>
-						<View style={styles.answerBoxForChoice}>
+						<View style={ExamScreenStyle.answerBoxForChoice}>
 							<ButtonGroup 
 								buttonContainerStyle={{flexDirection:'column'}}
 								fontStyle={{fontSize:15, color:'#fff'}}
-								style={styles.answerBoxForChoiceBtn}
-								styleFocused={styles.btnFocusedForChoice}
+								style={ExamScreenStyle.answerBoxForChoiceBtn}
+								styleFocused={ExamScreenStyle.btnFocusedForChoice}
 								buttonsLabel={arr}
 								index={idQuestions}
 								onPress={addAnswer}
@@ -433,7 +434,7 @@ export default function ExamScreen({navigation, route}) {
 	},[])
 
 	return ( 
-	    <SafeAreaView style={styles.container}>
+	    <SafeAreaView style={ExamScreenStyle.container}>
 			<ExamTopBar 
 				title={route.params.id} 
 				onPress={()=>{navigation.goBack()}} 
@@ -441,10 +442,10 @@ export default function ExamScreen({navigation, route}) {
 				ref={childRef}
 			/>
 			{renderAnswerBox(category)}
-			<View style={styles.changeQuestionsBtn}>
+			<View style={ExamScreenStyle.changeQuestionsBtn}>
 				<Button 
 					title={ category == -1 ? 'Powrót do testów' : 'Dalej' } 
-					styles={ styles.changeQuestionsBtnStyle }  
+					styles={ ExamScreenStyle.changeQuestionsBtnStyle }  
 					onPress={ category != -1 ? ()=>{setCategory(generateRandomQuestions()); setDoneChangeText(false)} : ()=> {navigation.goBack()} }
 				/>
 			</View> 
@@ -452,7 +453,7 @@ export default function ExamScreen({navigation, route}) {
 	);
 }
 
-const styles = StyleSheet.create({
+/*const Styles = StyleSheet.create({
     container: {
 	  backgroundColor:'#FEECE9',
 	  height:'100%'
@@ -589,4 +590,4 @@ const styles = StyleSheet.create({
 	mistakeBoxQuestionsText:{
 		color:'#fff'
 	}
-  });
+  });*/

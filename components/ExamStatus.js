@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import { Text, View, TouchableOpacity} from 'react-native';
+import { beginningStyle, triedStyle, completedStyle } from '../Style';
 import { Button } from '../components/Button';
 
 export const Beginning = ({ item, onPress, style }) => (
@@ -71,7 +72,7 @@ export const Completed = ({ item, onPress, style }) => (
   );
  
 
-const beginningStyle = StyleSheet.create({    
+/*const beginningStyle = StyleSheet.create({    
   
     exam: {
         backgroundColor: '#2F3A8F',
@@ -144,4 +145,4 @@ const completedStyle = StyleSheet.create({
         width:'100%',
         flex:2
     },
-});
+});*/

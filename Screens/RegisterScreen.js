@@ -1,8 +1,8 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, SafeAreaView, TextInput, TouchableOpacity, Alert, ScrollView} from 'react-native';
+import { Text, View, SafeAreaView, TextInput, TouchableOpacity, Alert} from 'react-native';
 import { useForm, Controller } from "react-hook-form";
 import { createUserWithEmailAndPassword, updateProfile  } from 'firebase/auth';
 import { newUser } from '../database/newUser';
+import { RegisterScreenStyle } from '../Style';
 
 export default function RegisterScreen({navigation,route}) {
 
@@ -24,16 +24,16 @@ export default function RegisterScreen({navigation,route}) {
     }
 
     return (
-        <SafeAreaView style={styles.container}>   
-            <View style={styles.FormBox}>
-                <Text style={styles.title}>Tworzenie Konta</Text>
+        <SafeAreaView style={RegisterScreenStyle.container}>   
+            <View style={RegisterScreenStyle.FormBox}>
+                <Text style={RegisterScreenStyle.title}>Tworzenie Konta</Text>
                 <Controller
                     control={control}
                     name="userName"
                     rules={{require:true}}
                     render={({field: {value, onChange}}) => 
                         <TextInput 
-                            style={styles.input}
+                            style={RegisterScreenStyle.input}
                             placeholder='Nazwa użytkownika'
                             value={value}
                             onChangeText={onChange}
@@ -48,7 +48,7 @@ export default function RegisterScreen({navigation,route}) {
                     rules={{require:true}}
                     render={({field: {value, onChange}}) => 
                         <TextInput 
-                            style={styles.input}
+                            style={RegisterScreenStyle.input}
                             placeholder='Adres email'
                             value={value}
                             onChangeText={onChange}
@@ -63,7 +63,7 @@ export default function RegisterScreen({navigation,route}) {
                     rules={{require:true}}
                     render={({field: {value, onChange}}) => 
                         <TextInput 
-                            style={styles.input}
+                            style={RegisterScreenStyle.input}
                             placeholder='Hasło'
                             value={value}
                             onChangeText={onChange}
@@ -80,7 +80,7 @@ export default function RegisterScreen({navigation,route}) {
                     rules={{require:true}}
                     render={({field: {value, onChange}}) => 
                         <TextInput 
-                            style={styles.input}
+                            style={RegisterScreenStyle.input}
                             placeholder='Potwierdź hasło'
                             value={value}
                             onChangeText={onChange}
@@ -90,7 +90,7 @@ export default function RegisterScreen({navigation,route}) {
                         />
                     }
                 />
-                <TouchableOpacity onPress={handleSubmit(onSubmit)} style={styles.btn}>
+                <TouchableOpacity onPress={handleSubmit(onSubmit)} style={RegisterScreenStyle.btn}>
                     <Text>Stwórz Konto</Text>
                 </TouchableOpacity>
             </View>
@@ -98,7 +98,7 @@ export default function RegisterScreen({navigation,route}) {
     );
 }
 
-const styles = StyleSheet.create({
+/*const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FEECE9',
@@ -143,4 +143,4 @@ const styles = StyleSheet.create({
         fontSize:25,
         marginBottom:20
     },
-});
+});*/
